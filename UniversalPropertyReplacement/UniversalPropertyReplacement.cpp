@@ -1,4 +1,23 @@
-// Universal_Property_Replacement.cpp : Defines the exported functions for the DLL application.
+/****************************************************************************
+* Copyright (C) 2018 Zarklord
+*
+* This file is part of UniversalPropertyReplacement.
+*
+* UniversalPropertyReplacement is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with UniversalPropertyReplacement.  If not, see <http://www.gnu.org/licenses/>.
+****************************************************************************/
+
+// UniversalPropertyReplacement.cpp : Defines the exported functions for the DLL application.
 //
 
 #include "stdafx.h"
@@ -28,21 +47,22 @@ long UniversalPropReplacement::AttachDetour() {
 	SetDetourAddress(GetCString8, GetMethodAddress(App::Property, GetCString8));
 	SetDetourAddress(GetString16, GetMethodAddress(App::Property, GetString16));
 	SetDetourAddress(GetCString16, GetMethodAddress(App::Property, GetCString16));
-
-	long result = AttachDetourFunctionStatic(GetBool_original, DetouredGetBool);
-	result |= AttachDetourFunctionStatic(GetFloat_original, DetouredGetFloat);
-	result |= AttachDetourFunctionStatic(GetInt32_original, DetouredGetInt32);
-	result |= AttachDetourFunctionStatic(GetUInt32_original, DetouredGetUInt32);
-	result |= AttachDetourFunctionStatic(GetVector2_original, DetouredGetVector2);
-	result |= AttachDetourFunctionStatic(GetVector3_original, DetouredGetVector3);
-	result |= AttachDetourFunctionStatic(GetVector4_original, DetouredGetVector4);
-	result |= AttachDetourFunctionStatic(GetColorRGB_original, DetouredGetColorRGB);
-	result |= AttachDetourFunctionStatic(GetColorRGBA_original, DetouredGetColorRGBA);
-	result |= AttachDetourFunctionStatic(GetKey_original, DetouredGetKey);
-	result |= AttachDetourFunctionStatic(GetString8_original, DetouredGetString8);
-	result |= AttachDetourFunctionStatic(GetCString8_original, DetouredGetCString8);
-	result |= AttachDetourFunctionStatic(GetString16_original, DetouredGetString16);
-	result |= AttachDetourFunctionStatic(GetCString16_original, DetouredGetCString16);
+	long result = 0;
+	//lets not Detour functions with empty vector array's, no reason to run useless code.
+	if (boolValueMapDefault.size() == 0 && boolValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetBool_original, DetouredGetBool);
+	if (floatValueMapDefault.size() == 0 && floatValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetFloat_original, DetouredGetFloat);
+	if (int32ValueMapDefault.size() == 0 && int32ValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetInt32_original, DetouredGetInt32);
+	if (uint32ValueMapDefault.size() == 0 && uint32ValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetUInt32_original, DetouredGetUInt32);
+	if (vector2ValueMapDefault.size() == 0 && vector2ValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetVector2_original, DetouredGetVector2);
+	if (vector3ValueMapDefault.size() == 0 && vector3ValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetVector3_original, DetouredGetVector3);
+	if (vector4ValueMapDefault.size() == 0 && vector4ValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetVector4_original, DetouredGetVector4);
+	if (colorRGBValueMapDefault.size() == 0 && colorRGBValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetColorRGB_original, DetouredGetColorRGB);
+	if (colorRGBAValueMapDefault.size() == 0 && colorRGBAValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetColorRGBA_original, DetouredGetColorRGBA);
+	if (resourceKeyValueMapDefault.size() == 0 && resourceKeyValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetKey_original, DetouredGetKey);
+	if (stringValueMapDefault.size() == 0 && stringValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetString8_original, DetouredGetString8);
+	if (cstringValueMapDefault.size() == 0 && cstringValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetCString8_original, DetouredGetCString8);
+	if (wstringValueMapDefault.size() == 0 && wstringValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetString16_original, DetouredGetString16);
+	if (wcstringValueMapDefault.size() == 0 && wcstringValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetCString16_original, DetouredGetCString16);
 	// You can compare result to NO_ERROR to see if there was any error. Or you can just ignore it.
 	return result;
 }
