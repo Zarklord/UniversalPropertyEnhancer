@@ -310,7 +310,6 @@ bool DetouredGetCString8(const App::PropertyList *pPropertyList, uint32_t proper
 }
 
 bool DetouredGetString16(const App::PropertyList *pPropertyList, uint32_t propertyID, eastl::string16 &dst) {
-	ArgScript::PrintF(App::ICheatManager::GetConsoleStream(), "%u", wstringValueMapOverride.size());
 	return DetouredGetProp(GetString16_original, wstringValueMapOverride, wstringValueMapDefault, pPropertyList, propertyID, dst);
 }
 
