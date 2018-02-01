@@ -49,20 +49,20 @@ long UniversalPropReplacement::AttachDetour() {
 	SetDetourAddress(GetCString16, GetMethodAddress(App::Property, GetCString16));
 	long result = 0;
 	//lets not Detour functions with empty vector array's, no reason to run useless code.
-	if (boolValueMapDefault.size() == 0 && boolValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetBool_original, DetouredGetBool);
-	if (floatValueMapDefault.size() == 0 && floatValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetFloat_original, DetouredGetFloat);
-	if (int32ValueMapDefault.size() == 0 && int32ValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetInt32_original, DetouredGetInt32);
-	if (uint32ValueMapDefault.size() == 0 && uint32ValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetUInt32_original, DetouredGetUInt32);
-	if (vector2ValueMapDefault.size() == 0 && vector2ValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetVector2_original, DetouredGetVector2);
-	if (vector3ValueMapDefault.size() == 0 && vector3ValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetVector3_original, DetouredGetVector3);
-	if (vector4ValueMapDefault.size() == 0 && vector4ValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetVector4_original, DetouredGetVector4);
-	if (colorRGBValueMapDefault.size() == 0 && colorRGBValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetColorRGB_original, DetouredGetColorRGB);
-	if (colorRGBAValueMapDefault.size() == 0 && colorRGBAValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetColorRGBA_original, DetouredGetColorRGBA);
-	if (resourceKeyValueMapDefault.size() == 0 && resourceKeyValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetKey_original, DetouredGetKey);
-	if (stringValueMapDefault.size() == 0 && stringValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetString8_original, DetouredGetString8);
-	if (cstringValueMapDefault.size() == 0 && cstringValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetCString8_original, DetouredGetCString8);
-	if (wstringValueMapDefault.size() == 0 && wstringValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetString16_original, DetouredGetString16);
-	if (wcstringValueMapDefault.size() == 0 && wcstringValueMapOverride.size() == 0) result |= AttachDetourFunctionStatic(GetCString16_original, DetouredGetCString16);
+	if (boolValueMapDefault.size() != 0 || boolValueMapOverride.size() != 0) result |= AttachDetourFunctionStatic(GetBool_original, DetouredGetBool);
+	if (floatValueMapDefault.size() != 0 || floatValueMapOverride.size() != 0) result |= AttachDetourFunctionStatic(GetFloat_original, DetouredGetFloat);
+	if (int32ValueMapDefault.size() != 0 || int32ValueMapOverride.size() != 0) result |= AttachDetourFunctionStatic(GetInt32_original, DetouredGetInt32);
+	if (uint32ValueMapDefault.size() != 0 || uint32ValueMapOverride.size() != 0) result |= AttachDetourFunctionStatic(GetUInt32_original, DetouredGetUInt32);
+	if (vector2ValueMapDefault.size() != 0 || vector2ValueMapOverride.size() != 0) result |= AttachDetourFunctionStatic(GetVector2_original, DetouredGetVector2);
+	if (vector3ValueMapDefault.size() != 0 || vector3ValueMapOverride.size() != 0) result |= AttachDetourFunctionStatic(GetVector3_original, DetouredGetVector3);
+	if (vector4ValueMapDefault.size() != 0 || vector4ValueMapOverride.size() != 0) result |= AttachDetourFunctionStatic(GetVector4_original, DetouredGetVector4);
+	if (colorRGBValueMapDefault.size() != 0 || colorRGBValueMapOverride.size() != 0) result |= AttachDetourFunctionStatic(GetColorRGB_original, DetouredGetColorRGB);
+	if (colorRGBAValueMapDefault.size() != 0 || colorRGBAValueMapOverride.size() != 0) result |= AttachDetourFunctionStatic(GetColorRGBA_original, DetouredGetColorRGBA);
+	if (resourceKeyValueMapDefault.size() != 0 || resourceKeyValueMapOverride.size() != 0) result |= AttachDetourFunctionStatic(GetKey_original, DetouredGetKey);
+	if (stringValueMapDefault.size() != 0 || stringValueMapOverride.size() != 0) result |= AttachDetourFunctionStatic(GetString8_original, DetouredGetString8);
+	if (cstringValueMapDefault.size() != 0 || cstringValueMapOverride.size() != 0) result |= AttachDetourFunctionStatic(GetCString8_original, DetouredGetCString8);
+	if (wstringValueMapDefault.size() != 0 || wstringValueMapOverride.size() != 0) result |= AttachDetourFunctionStatic(GetString16_original, DetouredGetString16);
+	if (wcstringValueMapDefault.size() != 0 || wcstringValueMapOverride.size() != 0) result |= AttachDetourFunctionStatic(GetCString16_original, DetouredGetCString16);
 	// You can compare result to NO_ERROR to see if there was any error. Or you can just ignore it.
 	return result;
 }
