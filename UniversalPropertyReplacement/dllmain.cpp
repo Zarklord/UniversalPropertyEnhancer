@@ -40,7 +40,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 
 		PrepareDetours(hModule);
 		// It is recommended to attach the detoured methods in specialised methods in the class
-		UniversalPropReplacement::AttachDetour();
+		UniversalPropReplacement::AttachDetours();
 		error = SendDetours();
 
 	case DLL_THREAD_ATTACH:

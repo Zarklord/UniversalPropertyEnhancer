@@ -32,7 +32,7 @@
 #include <iostream>
 
 
-long UniversalPropReplacement::AttachDetour() {
+long UniversalPropReplacement::AttachDetours() {
 	SetDetourAddress(GetBool, GetMethodAddress(App::Property, GetBool));
 	SetDetourAddress(GetFloat, GetMethodAddress(App::Property, GetFloat));
 	SetDetourAddress(GetInt32, GetMethodAddress(App::Property, GetInt32));
@@ -49,20 +49,20 @@ long UniversalPropReplacement::AttachDetour() {
 	SetDetourAddress(GetCString16, GetMethodAddress(App::Property, GetCString16));
 	long result = 0;
 
-	result |= AttachDetourFunctionStatic(GetBool_original, DetouredGetBool);
-	result |= AttachDetourFunctionStatic(GetFloat_original, DetouredGetFloat);
-	result |= AttachDetourFunctionStatic(GetInt32_original, DetouredGetInt32);
-	result |= AttachDetourFunctionStatic(GetUInt32_original, DetouredGetUInt32);
-	result |= AttachDetourFunctionStatic(GetVector2_original, DetouredGetVector2);
-	result |= AttachDetourFunctionStatic(GetVector3_original, DetouredGetVector3);
-	result |= AttachDetourFunctionStatic(GetVector4_original, DetouredGetVector4);
-	result |= AttachDetourFunctionStatic(GetColorRGB_original, DetouredGetColorRGB);
-	result |= AttachDetourFunctionStatic(GetColorRGBA_original, DetouredGetColorRGBA);
-	result |= AttachDetourFunctionStatic(GetKey_original, DetouredGetKey);
-	result |= AttachDetourFunctionStatic(GetString8_original, DetouredGetString8);
-	result |= AttachDetourFunctionStatic(GetCString8_original, DetouredGetCString8);
-	result |= AttachDetourFunctionStatic(GetString16_original, DetouredGetString16);
-	result |= AttachDetourFunctionStatic(GetCString16_original, DetouredGetCString16);
+	result |= AttachDetourFunction(GetBool, DetouredGetBool);
+	result |= AttachDetourFunction(GetFloat, DetouredGetFloat);
+	result |= AttachDetourFunction(GetInt32, DetouredGetInt32);
+	result |= AttachDetourFunction(GetUInt32, DetouredGetUInt32);
+	result |= AttachDetourFunction(GetVector2, DetouredGetVector2);
+	result |= AttachDetourFunction(GetVector3, DetouredGetVector3);
+	result |= AttachDetourFunction(GetVector4, DetouredGetVector4);
+	result |= AttachDetourFunction(GetColorRGB, DetouredGetColorRGB);
+	result |= AttachDetourFunction(GetColorRGBA, DetouredGetColorRGBA);
+	result |= AttachDetourFunction(GetKey, DetouredGetKey);
+	result |= AttachDetourFunction(GetString8, DetouredGetString8);
+	result |= AttachDetourFunction(GetCString8, DetouredGetCString8);
+	result |= AttachDetourFunction(GetString16, DetouredGetString16);
+	result |= AttachDetourFunction(GetCString16, DetouredGetCString16);
 	// You can compare result to NO_ERROR to see if there was any error. Or you can just ignore it.
 	return result;
 }

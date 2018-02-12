@@ -30,7 +30,7 @@
 
 class UniversalPropReplacement {
 public:
-	static long AttachDetour();
+	static long AttachDetours();
 	static bool Inititalize();
 };
 static eastl::vector<eastl::pair<uint32_t, bool>> boolValueMapDefault{};
