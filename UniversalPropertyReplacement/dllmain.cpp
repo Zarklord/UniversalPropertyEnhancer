@@ -1,5 +1,5 @@
 /****************************************************************************
-* Copyright (C) 2018 Zarklord
+* Copyright (C) 2018, 2020 Zarklord
 *
 * This file is part of UniversalPropertyReplacement.
 *
@@ -19,33 +19,54 @@
 
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "stdafx.h"
-
-#include <ModAPI\MainUtilities.h>
 #include "UniversalPropertyReplacement.h"
 
+void Initialize()
+{
+	// This method is executed when the game starts, before the user interface is shown
+	// Here you can do things such as:
+	//  - Add new cheats
+	//  - Add new simulator classes
+	//  - Add new game modes
+	//  - Add new space tools
+	//  - Change materials
+	UniversalPropertyReplacement::Inititalize();
+}
+
+void Dispose()
+{
+	// This method is called when the game is closing
+}
+
+void AttachDetours()
+{
+	//ManualBreakpoint();
+	// Call the attach() method on any detours you want to add
+	// For example: cViewer_SetRenderType_detour::attach(GetAddress(cViewer, SetRenderType));
+	UniversalPropertyReplacement::AttachDetours();
+}
+
+
+// Generally, you don't need to touch any code here
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
                        LPVOID lpReserved
 					 )
 {
-	long error;
 	switch (ul_reason_for_call)
 	{
 	case DLL_PROCESS_ATTACH:
-
-		// This line is always necessary
-		ModAPI::ModAPIUtils::InitModAPI();
-
-		ModAPI::ModAPIUtils::AddInitFunction(UniversalPropReplacement::Inititalize);
+		ModAPI::AddPostInitFunction(Initialize);
+		ModAPI::AddDisposeFunction(Dispose);
 
 		PrepareDetours(hModule);
-		// It is recommended to attach the detoured methods in specialised methods in the class
-		UniversalPropReplacement::AttachDetours();
-		error = SendDetours();
+		AttachDetours();
+		CommitDetours();
+		break;
 
+	case DLL_PROCESS_DETACH:
 	case DLL_THREAD_ATTACH:
 	case DLL_THREAD_DETACH:
-	case DLL_PROCESS_DETACH:
 		break;
 	}
 	return TRUE;

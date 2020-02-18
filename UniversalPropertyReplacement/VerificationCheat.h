@@ -1,5 +1,5 @@
 /****************************************************************************
-* Copyright (C) 2018 Zarklord
+* Copyright (C) 2018, 2020 Zarklord
 *
 * This file is part of UniversalPropertyReplacement.
 *
@@ -20,8 +20,9 @@
 #pragma once
 
 #include <Spore\Cheats.h>
-class TestingCheat : public ArgScript::ICommand {
-public:
+
+class VerificationCheat: public ArgScript::ICommand {
+	public:
 	virtual void ParseLine(const ArgScript::Line& line) override;
 };
 

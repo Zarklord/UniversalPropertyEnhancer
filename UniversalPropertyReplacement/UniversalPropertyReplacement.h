@@ -1,5 +1,5 @@
 /****************************************************************************
-* Copyright (C) 2018 Zarklord
+* Copyright (C) 2018, 2020 Zarklord
 *
 * This file is part of UniversalPropertyReplacement.
 *
@@ -18,119 +18,59 @@
 ****************************************************************************/
 
 #pragma once
+#include <Spore/BasicIncludes.h>
 
-#include <Spore\Detouring.h>
-#include <Spore\App\PropertyList.h>
-#include <Spore\App\IPropManager.h>
-#include <Spore\App\Property.h>
+namespace UniversalPropertyReplacement {
+	bool Inititalize();
+	long AttachDetours();
 
-#define DetouredMethodStaticFixed(name, returnType, newName, parameters) typedef returnType (* name##_original_t)(parameters); \
-	static name##_original_t name##_original; \
-	static returnType newName (parameters);
+	static eastl::map<uint32_t, bool> boolValueMapOverride {};
+	static eastl::map<uint32_t, eastl::pair<bool*, uint32_t>> boolValueMapArrayOverride {};
 
-class UniversalPropReplacement {
-public:
-	static long AttachDetours();
-	static bool Inititalize();
+	static eastl::map<uint32_t, int32_t> int32ValueMapOverride {};
+	static eastl::map<uint32_t, eastl::pair<int32_t*, uint32_t>> int32ValueMapArrayOverride {};
+
+	static eastl::map<uint32_t, uint32_t> uint32ValueMapOverride {};
+	static eastl::map<uint32_t, eastl::pair<uint32_t*, uint32_t>> uint32ValueMapArrayOverride {};
+
+	static eastl::map<uint32_t, float> floatValueMapOverride{};
+	static eastl::map<uint32_t, eastl::pair<float*, uint32_t>> floatValueMapArrayOverride {};
+
+	static eastl::map<uint32_t, eastl::string> string8ValueMapOverride {};
+	static eastl::map<uint32_t, eastl::pair<eastl::string*, uint32_t>> string8ValueMapArrayOverride {};
+
+	static eastl::map<uint32_t, eastl::string16> string16ValueMapOverride {};
+	static eastl::map<uint32_t, eastl::pair<eastl::string16*, uint32_t>> string16ValueMapArrayOverride {};
+
+	static eastl::map<uint32_t, ResourceKey> keyValueMapOverride {};
+	static eastl::map<uint32_t, eastl::pair<ResourceKey*, uint32_t>> keyValueMapArrayOverride {};
+
+	static eastl::map<uint32_t, LocalizedString> textValueMapOverride {};
+	static eastl::map<uint32_t, eastl::pair<LocalizedString*, uint32_t>> textValueMapArrayOverride {};
+
+	static eastl::map<uint32_t, Vector2> vector2ValueMapOverride{};
+	static eastl::map<uint32_t, eastl::pair<Vector2*, uint32_t>> vector2ValueMapArrayOverride {};
+
+	static eastl::map<uint32_t, Vector3> vector3ValueMapOverride{};
+	static eastl::map<uint32_t, eastl::pair<Vector3*, uint32_t>> vector3ValueMapArrayOverride {};
+
+	static eastl::map<uint32_t, Vector4> vector4ValueMapOverride{};
+	static eastl::map<uint32_t, eastl::pair<Vector4*, uint32_t>> vector4ValueMapArrayOverride {};
+
+	static eastl::map<uint32_t, ColorRGB> colorRGBValueMapOverride{};
+	static eastl::map<uint32_t, eastl::pair<ColorRGB*, uint32_t>> colorRGBValueMapArrayOverride {};
+
+	static eastl::map<uint32_t, ColorRGBA> colorRGBAValueMapOverride {};
+	static eastl::map<uint32_t, eastl::pair<ColorRGBA*, uint32_t>> colorRGBAValueMapArrayOverride {};
+
+	static eastl::map<uint32_t, Transform> transformValueMapOverride {};
+	static eastl::map<uint32_t, eastl::pair<Transform*, uint32_t>> transformValueMapArrayOverride {};
+
+	static eastl::map<uint32_t, BoundingBox> bBoxValueMapOverride {};
+	static eastl::map<uint32_t, eastl::pair<BoundingBox*, uint32_t>> bBoxValueMapArrayOverride {};
+
+	member_detour(GetPropertyAlt__detour, App::PropertyList, bool(uint32_t propertyID, App::Property*& result)) {};
+	member_detour(GetProperty__detour, App::PropertyList, bool(uint32_t propertyID, App::Property*& result)) {};
+	member_detour(GetPropertyObject__detour, App::PropertyList, App::Property*(uint32_t propertyID)) {};
 };
-static eastl::vector<eastl::pair<uint32_t, bool>> boolValueMapDefault{};
-static eastl::vector<eastl::pair<uint32_t, bool>> boolValueMapOverride{};
 
-static eastl::vector<eastl::pair<uint32_t, float>> floatValueMapDefault{};
-static eastl::vector<eastl::pair<uint32_t, float>> floatValueMapOverride{};
-
-static eastl::vector<eastl::pair<uint32_t, int32_t>> int32ValueMapDefault{};
-static eastl::vector<eastl::pair<uint32_t, int32_t>> int32ValueMapOverride{};
-
-static eastl::vector<eastl::pair<uint32_t, uint32_t>> uint32ValueMapDefault{};
-static eastl::vector<eastl::pair<uint32_t, uint32_t>> uint32ValueMapOverride{};
-
-static eastl::vector<eastl::pair<uint32_t, Vector2>> vector2ValueMapDefault{};
-static eastl::vector<eastl::pair<uint32_t, Vector2>> vector2ValueMapOverride{};
-
-static eastl::vector<eastl::pair<uint32_t, Vector3>> vector3ValueMapDefault{};
-static eastl::vector<eastl::pair<uint32_t, Vector3>> vector3ValueMapOverride{};
-
-static eastl::vector<eastl::pair<uint32_t, Vector4>> vector4ValueMapDefault{};
-static eastl::vector<eastl::pair<uint32_t, Vector4>> vector4ValueMapOverride{};
-
-static eastl::vector<eastl::pair<uint32_t, ColorRGB>> colorRGBValueMapDefault{};
-static eastl::vector<eastl::pair<uint32_t, ColorRGB>> colorRGBValueMapOverride{};
-
-static eastl::vector<eastl::pair<uint32_t, ColorRGBA>> colorRGBAValueMapDefault{};
-static eastl::vector<eastl::pair<uint32_t, ColorRGBA>> colorRGBAValueMapOverride{};
-
-static eastl::vector<eastl::pair<uint32_t, ResourceKey>> resourceKeyValueMapDefault{};
-static eastl::vector<eastl::pair<uint32_t, ResourceKey>> resourceKeyValueMapOverride{};
-
-static eastl::vector<eastl::pair<uint32_t, eastl::string>> stringValueMapDefault{};
-static eastl::vector<eastl::pair<uint32_t, eastl::string>> stringValueMapOverride{};
-
-static eastl::vector<eastl::pair<uint32_t, char *>> cstringValueMapDefault{};
-static eastl::vector<eastl::pair<uint32_t, char *>> cstringValueMapOverride{};
-
-static eastl::vector<eastl::pair<uint32_t, eastl::string16>> wstringValueMapDefault{};
-static eastl::vector<eastl::pair<uint32_t, eastl::string16>> wstringValueMapOverride{};
-
-static eastl::vector<eastl::pair<uint32_t, wchar_t *>> wcstringValueMapDefault{};
-static eastl::vector<eastl::pair<uint32_t, wchar_t *>> wcstringValueMapOverride{};
-
-template<typename method_t,typename T>
-static bool DetouredGetProp(method_t &method, eastl::vector<eastl::pair<uint32_t, T>> &override, eastl::vector<eastl::pair<uint32_t, T>> &default, const App::PropertyList * pPropertyList, uint32_t propertyID, T &dst);
-
-
-#pragma DisableOptimization
-DetouredMethodStaticFixed(GetBool, bool, DetouredGetBool,
-						  PARAMS(const App::PropertyList *pPropertyList, uint32_t propertyID, bool &dst));
-
-#pragma DisableOptimization
-DetouredMethodStaticFixed(GetFloat, bool, DetouredGetFloat,
-						  PARAMS(const App::PropertyList *pPropertyList, uint32_t propertyID, float &dst));
-
-#pragma DisableOptimization
-DetouredMethodStaticFixed(GetInt32, bool, DetouredGetInt32,
-						  PARAMS(const App::PropertyList *pPropertyList, uint32_t propertyID, int32_t &dst));
-
-#pragma DisableOptimization
-DetouredMethodStaticFixed(GetUInt32, bool, DetouredGetUInt32,
-						  PARAMS(const App::PropertyList *pPropertyList, uint32_t propertyID, uint32_t &dst));
-
-#pragma DisableOptimization
-DetouredMethodStaticFixed(GetVector2, bool, DetouredGetVector2,
-						  PARAMS(const App::PropertyList *pPropertyList, uint32_t propertyID, Vector2 &dst));
-
-#pragma DisableOptimization
-DetouredMethodStaticFixed(GetVector3, bool, DetouredGetVector3,
-						  PARAMS(const App::PropertyList *pPropertyList, uint32_t propertyID, Vector3 &dst));
-
-#pragma DisableOptimization
-DetouredMethodStaticFixed(GetVector4, bool, DetouredGetVector4,
-						  PARAMS(const App::PropertyList *pPropertyList, uint32_t propertyID, Vector4 &dst));
-
-#pragma DisableOptimization
-DetouredMethodStaticFixed(GetColorRGB, bool, DetouredGetColorRGB,
-						  PARAMS(const App::PropertyList *pPropertyList, uint32_t propertyID, ColorRGB &dst));
-
-#pragma DisableOptimization
-DetouredMethodStaticFixed(GetColorRGBA, bool, DetouredGetColorRGBA,
-						  PARAMS(const App::PropertyList *pPropertyList, uint32_t propertyID, ColorRGBA &dst));
-
-#pragma DisableOptimization
-DetouredMethodStaticFixed(GetKey, bool, DetouredGetKey,
-						  PARAMS(const App::PropertyList *pPropertyList, uint32_t propertyID, ResourceKey &dst));
-
-#pragma DisableOptimization
-DetouredMethodStaticFixed(GetString8, bool, DetouredGetString8,
-						  PARAMS(const App::PropertyList *pPropertyList, uint32_t propertyID, eastl::string &dst));
-
-#pragma DisableOptimization
-DetouredMethodStaticFixed(GetCString8, bool, DetouredGetCString8,
-						  PARAMS(const App::PropertyList *pPropertyList, uint32_t propertyID, char * &dst));
-
-#pragma DisableOptimization
-DetouredMethodStaticFixed(GetString16, bool, DetouredGetString16,
-						  PARAMS(const App::PropertyList *pPropertyList, uint32_t propertyID, eastl::string16 &dst));
-
-#pragma DisableOptimization
-DetouredMethodStaticFixed(GetCString16, bool, DetouredGetCString16,
-						  PARAMS(const App::PropertyList *pPropertyList, uint32_t propertyID, wchar_t * &dst));

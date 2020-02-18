@@ -23,12 +23,8 @@ bld/
 [Oo]bj/
 
 # Intermidate Building Things
-UniversalPropertyReplacement/[Dd]ebug - Disk/
-UniversalPropertyReplacement/[Dd]ebug - Steam Patched/
-UniversalPropertyReplacement/[Dd]ebug - Steam/
-UniversalPropertyReplacement/[Rr]elease - Disk/
-UniversalPropertyReplacement/[Rr]elease - Steam Patched/
-UniversalPropertyReplacement/[Rr]elease - Steam/
+UniversalPropertyReplacement/[Dd]ebug/
+UniversalPropertyReplacement/[Rr]elease/
 
 # Visual Studio 2015 cache/options directory
 .vs/

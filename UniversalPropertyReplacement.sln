@@ -1,40 +1,34 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UniversalPropertyReplacement", "UniversalPropertyReplacement\UniversalPropertyReplacement.vcxproj", "{07FC5B61-B575-4207-B464-AFAE6AF3FC19}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F057451A-1413-4D68-AF56-1BF529933420} = {F057451A-1413-4D68-AF56-1BF529933420}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Spore ModAPI", "..\..\Spore ModAPI\Spore ModAPI.vcxproj", "{F057451A-1413-4D68-AF56-1BF529933420}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug - Disk|x86 = Debug - Disk|x86
-		Debug - Steam Patched|x86 = Debug - Steam Patched|x86
-		Debug - Steam|x86 = Debug - Steam|x86
 		Debug|x86 = Debug|x86
-		Release - Disk|x86 = Release - Disk|x86
-		Release - Steam Patched|x86 = Release - Steam Patched|x86
-		Release - Steam|x86 = Release - Steam|x86
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{07FC5B61-B575-4207-B464-AFAE6AF3FC19}.Debug - Disk|x86.ActiveCfg = Debug - Disk|Win32
-		{07FC5B61-B575-4207-B464-AFAE6AF3FC19}.Debug - Disk|x86.Build.0 = Debug - Disk|Win32
-		{07FC5B61-B575-4207-B464-AFAE6AF3FC19}.Debug - Steam Patched|x86.ActiveCfg = Debug - Steam Patched|Win32
-		{07FC5B61-B575-4207-B464-AFAE6AF3FC19}.Debug - Steam Patched|x86.Build.0 = Debug - Steam Patched|Win32
-		{07FC5B61-B575-4207-B464-AFAE6AF3FC19}.Debug - Steam|x86.ActiveCfg = Debug - Steam|Win32
-		{07FC5B61-B575-4207-B464-AFAE6AF3FC19}.Debug - Steam|x86.Build.0 = Debug - Steam|Win32
 		{07FC5B61-B575-4207-B464-AFAE6AF3FC19}.Debug|x86.ActiveCfg = Debug|Win32
 		{07FC5B61-B575-4207-B464-AFAE6AF3FC19}.Debug|x86.Build.0 = Debug|Win32
-		{07FC5B61-B575-4207-B464-AFAE6AF3FC19}.Release - Disk|x86.ActiveCfg = Release - Disk|Win32
-		{07FC5B61-B575-4207-B464-AFAE6AF3FC19}.Release - Disk|x86.Build.0 = Release - Disk|Win32
-		{07FC5B61-B575-4207-B464-AFAE6AF3FC19}.Release - Steam Patched|x86.ActiveCfg = Release - Steam Patched|Win32
-		{07FC5B61-B575-4207-B464-AFAE6AF3FC19}.Release - Steam Patched|x86.Build.0 = Release - Steam Patched|Win32
-		{07FC5B61-B575-4207-B464-AFAE6AF3FC19}.Release - Steam|x86.ActiveCfg = Release - Steam|Win32
-		{07FC5B61-B575-4207-B464-AFAE6AF3FC19}.Release - Steam|x86.Build.0 = Release - Steam|Win32
 		{07FC5B61-B575-4207-B464-AFAE6AF3FC19}.Release|x86.ActiveCfg = Release|Win32
 		{07FC5B61-B575-4207-B464-AFAE6AF3FC19}.Release|x86.Build.0 = Release|Win32
+		{F057451A-1413-4D68-AF56-1BF529933420}.Debug|x86.ActiveCfg = Debug|Win32
+		{F057451A-1413-4D68-AF56-1BF529933420}.Debug|x86.Build.0 = Debug|Win32
+		{F057451A-1413-4D68-AF56-1BF529933420}.Release|x86.ActiveCfg = Release|Win32
+		{F057451A-1413-4D68-AF56-1BF529933420}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D7E7D6E5-C4EB-4E80-9522-972DAA109DD9}
 	EndGlobalSection
 EndGlobal

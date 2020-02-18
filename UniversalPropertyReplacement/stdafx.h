@@ -35,4 +35,4 @@
 // TODO: reference additional headers your program requires here
 
 // This is used everywhere
-#include <Spore\Internal.h>
+#include <Spore\BasicIncludes.h>
