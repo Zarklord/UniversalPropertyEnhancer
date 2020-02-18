@@ -91,7 +91,7 @@ uint32_t GetPropertyId(eastl::string str) {
 
 void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 	PropertyListPtr propList;
-	App::IPropManager::Get()->GetPropertyList(id("VerifyUPR"), id("VerifyUPR"), propList);
+	PropManager.GetPropertyList(id("VerifyUPR"), id("VerifyUPR"), propList);
 
 	App::Property* out;
 	bool testFailed = false;
@@ -187,7 +187,7 @@ void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 		testFailed = true;
 	}
 	/*Transform transformTest;
-	if (propList.get()->GetProperty(GetPropertyId("transform"), out)) {
+	if (propList->GetProperty(GetPropertyId("transform"), out)) {
 		transformTest = *(out->GetValueTransform());
 		if (VerifyValue(transformTest)) {
 			ReportReplacementFailed("transform");
@@ -195,7 +195,7 @@ void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 		}
 	}*/
 	/*BoundingBox bBoxTest;
-	if (propList.get()->GetProperty(GetPropertyId("bbox"), out)) {
+	if (propList->GetProperty(GetPropertyId("bbox"), out)) {
 		bBoxTest = *(out->GetValueBBox());
 		if (VerifyValue(bBoxTest)) {
 			ReportReplacementFailed("bbox");
@@ -206,7 +206,7 @@ void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 	uint32_t count;
 
 	bool* boolsTest;
-	if (propList.get()->GetProperty(GetPropertyId("bools"), out)) {
+	if (propList->GetProperty(GetPropertyId("bools"), out)) {
 		boolsTest = out->GetValueBool();
 		count = out->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(boolsTest[0]) && VerifyValue(boolsTest[1]))) {
@@ -215,7 +215,7 @@ void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 		}
 	}
 	int32_t* int32sTest;
-	if (propList.get()->GetProperty(GetPropertyId("int32s"), out)) {
+	if (propList->GetProperty(GetPropertyId("int32s"), out)) {
 		int32sTest = out->GetValueInt32();
 		count = out->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(int32sTest[0]) && VerifyValue(int32sTest[1]))) {
@@ -224,7 +224,7 @@ void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 		}
 	}
 	uint32_t* uint32sTest;
-	if (propList.get()->GetProperty(GetPropertyId("uint32s"), out)) {
+	if (propList->GetProperty(GetPropertyId("uint32s"), out)) {
 		uint32sTest = out->GetValueUInt32();
 		count = out->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(uint32sTest[0]) && VerifyValue(uint32sTest[1]))) {
@@ -233,7 +233,7 @@ void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 		}
 	}
 	float* floatsTest;
-	if (propList.get()->GetProperty(GetPropertyId("floats"), out)) {
+	if (propList->GetProperty(GetPropertyId("floats"), out)) {
 		floatsTest = out->GetValueFloat();
 		count = out->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(floatsTest[0]) && VerifyValue(floatsTest[1]))) {
@@ -242,7 +242,7 @@ void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 		}
 	}
 	eastl::string* string8sTest;
-	if (propList.get()->GetProperty(GetPropertyId("string8s"), out)) {
+	if (propList->GetProperty(GetPropertyId("string8s"), out)) {
 		string8sTest = out->GetValueString8();
 		count = out->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(string8sTest[0]) && VerifyValue(string8sTest[1]))) {
@@ -251,7 +251,7 @@ void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 		}
 	}
 	eastl::string16* string16sTest;
-	if (propList.get()->GetProperty(GetPropertyId("string16s"), out)) {
+	if (propList->GetProperty(GetPropertyId("string16s"), out)) {
 		string16sTest = out->GetValueString16();
 		count = out->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(string16sTest[0]) && VerifyValue(string16sTest[1]))) {
@@ -260,7 +260,7 @@ void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 		}
 	}
 	ResourceKey* keysTest;
-	if (propList.get()->GetProperty(GetPropertyId("keys"), out)) {
+	if (propList->GetProperty(GetPropertyId("keys"), out)) {
 		keysTest = out->GetValueKey();
 		count = out->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(keysTest[0]) && VerifyValue(keysTest[1]))) {
@@ -269,7 +269,7 @@ void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 		}
 	}
 	LocalizedString* textsTest;
-	if (propList.get()->GetProperty(GetPropertyId("texts"), out)) {
+	if (propList->GetProperty(GetPropertyId("texts"), out)) {
 		textsTest = out->GetValueText();
 		count = out->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(textsTest[0]) && VerifyValue(textsTest[1]))) {
@@ -278,7 +278,7 @@ void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 		}
 	}
 	Vector2* vector2sTest;
-	if (propList.get()->GetProperty(GetPropertyId("vector2s"), out)) {
+	if (propList->GetProperty(GetPropertyId("vector2s"), out)) {
 		vector2sTest = out->GetValueVector2();
 		count = out->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(vector2sTest[0]) && VerifyValue(vector2sTest[1]))) {
@@ -287,7 +287,7 @@ void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 		}
 	}
 	Vector3* vector3sTest;
-	if (propList.get()->GetProperty(GetPropertyId("vector3s"), out)) {
+	if (propList->GetProperty(GetPropertyId("vector3s"), out)) {
 		vector3sTest = out->GetValueVector3();
 		count = out->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(vector3sTest[0]) && VerifyValue(vector3sTest[1]))) {
@@ -296,7 +296,7 @@ void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 		}
 	}
 	Vector4* vector4sTest;
-	if (propList.get()->GetProperty(GetPropertyId("vector4s"), out)) {
+	if (propList->GetProperty(GetPropertyId("vector4s"), out)) {
 		vector4sTest = out->GetValueVector4();
 		count = out->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(vector4sTest[0]) && VerifyValue(vector4sTest[1]))) {
@@ -305,7 +305,7 @@ void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 		}
 	}
 	ColorRGB* colorRGBsTest;
-	if (propList.get()->GetProperty(GetPropertyId("colorRGBs"), out)) {
+	if (propList->GetProperty(GetPropertyId("colorRGBs"), out)) {
 		colorRGBsTest = out->GetValueColorRGB();
 		count = out->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(colorRGBsTest[0]) && VerifyValue(colorRGBsTest[1]))) {
@@ -314,7 +314,7 @@ void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 		}
 	}
 	ColorRGBA* colorRGBAsTest;
-	if (propList.get()->GetProperty(GetPropertyId("colorRGBAs"), out)) {
+	if (propList->GetProperty(GetPropertyId("colorRGBAs"), out)) {
 		colorRGBAsTest = out->GetValueColorRGBA();
 		count = out->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(colorRGBAsTest[0]) && VerifyValue(colorRGBAsTest[1]))) {
@@ -323,7 +323,7 @@ void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 		}
 	}
 	Transform* transformsTest;
-	if (propList.get()->GetProperty(GetPropertyId("transforms"), out)) {
+	if (propList->GetProperty(GetPropertyId("transforms"), out)) {
 		transformsTest = out->GetValueTransform();
 		count = out->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(transformsTest[0]) && VerifyValue(transformsTest[1]))) {
@@ -332,7 +332,7 @@ void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 		}
 	}
 	BoundingBox* bBoxsTest;
-	if (propList.get()->GetProperty(GetPropertyId("bboxs"), out)) {
+	if (propList->GetProperty(GetPropertyId("bboxs"), out)) {
 		bBoxsTest = out->GetValueBBox();
 		count = out->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(bBoxsTest[0]) && VerifyValue(bBoxsTest[1]))) {

@@ -20,7 +20,6 @@
 #include "stdafx.h"
 #include "UniversalPropertyReplacement.h"
 #include "VerificationCheat.h"
-#include <Spore/Properties.h>
 
 namespace UniversalPropertyReplacement {
 	long AttachDetours() {
@@ -32,10 +31,10 @@ namespace UniversalPropertyReplacement {
 		return result;
 	}
 	bool Inititalize() {
-		App::ICheatManager::Get()->AddCheat("VerifyUPR", new VerificationCheat());
+		CheatManager.AddCheat("VerifyUPR", new VerificationCheat());
 		uint32_t groupID = id("prop_overrides");
 		eastl::vector<uint32_t> instanceList{};
-		App::IPropManager::Get()->GetAllListIDs(groupID, instanceList);
+		PropManager.GetAllListIDs(groupID, instanceList);
 
 		for (eastl_size_t i = 0; i < instanceList.size(); i++) {
 			PropertyListPtr propList;
@@ -65,185 +64,185 @@ namespace UniversalPropertyReplacement {
 					bool value;
 					result = App::Property::GetBool(propList.get(), id(valueString.c_str()), value);
 					if (!result) continue;
-					boolValueMapOverride.emplace(eastl::pair<uint32_t, bool>{replaceHash, value});
+					boolValueMapOverride[replaceHash] = value;
 				} else if (typeString == "int32") {
 					int32_t value;
 					result = App::Property::GetInt32(propList.get(), id(valueString.c_str()), value);
 					if (!result) continue;
-					int32ValueMapOverride.emplace(eastl::pair<uint32_t, int32_t>{replaceHash, value});
+					int32ValueMapOverride[replaceHash] = value;
 				} else if (typeString == "uint32") {
 					uint32_t value;
 					result = App::Property::GetUInt32(propList.get(), id(valueString.c_str()), value);
 					if (!result) continue;
-					uint32ValueMapOverride.emplace(eastl::pair<uint32_t, uint32_t>{replaceHash, value});
+					uint32ValueMapOverride[replaceHash] = value;
 				} else if (typeString == "float") {
 					float value;
 					result = App::Property::GetFloat(propList.get(), id(valueString.c_str()), value);
 					if (!result) continue;
-					floatValueMapOverride.emplace(eastl::pair<uint32_t, float>{replaceHash, value});
+					floatValueMapOverride[replaceHash] = value;
 				} else if (typeString == "string8") {
 					eastl::string value;
 					result = App::Property::GetString8(propList.get(), id(valueString.c_str()), value);
 					if (!result) continue;
-					string8ValueMapOverride.emplace(eastl::pair<uint32_t, eastl::string8>{replaceHash, value});
+					string8ValueMapOverride[replaceHash] = value;
 				} else if (typeString == "string16") {
 					eastl::string16 value;
 					result = App::Property::GetString16(propList.get(), id(valueString.c_str()), value);
 					if (!result) continue;
-					string16ValueMapOverride.emplace(eastl::pair<uint32_t, eastl::string16>{replaceHash, value});
+					string16ValueMapOverride[replaceHash] = value;
 				} else if (typeString == "key") {
 					ResourceKey value;
 					result = App::Property::GetKey(propList.get(), id(valueString.c_str()), value);
 					if (!result) continue;
-					keyValueMapOverride.emplace(eastl::pair<uint32_t, ResourceKey>{replaceHash, value});
+					keyValueMapOverride[replaceHash] = value;
 				} else if (typeString == "text") {
 					LocalizedString value;
 					result = App::Property::GetText(propList.get(), id(valueString.c_str()), value);
 					if (!result) continue;
-					textValueMapOverride.emplace(eastl::pair<uint32_t, LocalizedString>{replaceHash, value});
+					textValueMapOverride[replaceHash] = value;
 				} else if (typeString == "vector2") {
 					Vector2 value;
 					result = App::Property::GetVector2(propList.get(), id(valueString.c_str()), value);
 					if (!result) continue;
-					vector2ValueMapOverride.emplace(eastl::pair<uint32_t, Vector2>{replaceHash, value});
+					vector2ValueMapOverride[replaceHash] = value;
 				} else if (typeString == "vector3") {
 					Vector3 value;
 					result = App::Property::GetVector3(propList.get(), id(valueString.c_str()), value);
 					if (!result) continue;
-					vector3ValueMapOverride.emplace(eastl::pair<uint32_t, Vector3>{replaceHash, value});
+					vector3ValueMapOverride[replaceHash] = value;
 				} else if (typeString == "vector4") {
 					Vector4 value;
 					result = App::Property::GetVector4(propList.get(), id(valueString.c_str()), value);
 					if (!result) continue;
-					vector4ValueMapOverride.emplace(eastl::pair<uint32_t, Vector4>{replaceHash, value});
+					vector4ValueMapOverride[replaceHash] = value;
 				} else if (typeString == "colorrgb") {
 					ColorRGB value;
 					result = App::Property::GetColorRGB(propList.get(), id(valueString.c_str()), value);
 					if (!result) continue;
-					colorRGBValueMapOverride.emplace(eastl::pair<uint32_t, ColorRGB>{replaceHash, value});
+					colorRGBValueMapOverride[replaceHash] = value;
 				} else if (typeString == "colorrgba") {
 					ColorRGBA value;
 					result = App::Property::GetColorRGBA(propList.get(), id(valueString.c_str()), value);
 					if (!result) continue;
-					colorRGBAValueMapOverride.emplace(eastl::pair<uint32_t, ColorRGBA>{replaceHash, value});
+					colorRGBAValueMapOverride[replaceHash] = value;
 				} else if (typeString == "transform") {
 					/*ManualBreakpoint();
 					Transform value;
-					result = propList.get()->GetProperty(id(valueString.c_str()), out);
+					result = propList->GetProperty(id(valueString.c_str()), out);
 					if (!result) continue;
 					value = *(out->GetValueTransform());
-					transformValueMapOverride.emplace(eastl::pair<uint32_t, Transform>{replaceHash, value});*/
+					transformValueMapOverride[replaceHash] = value;*/
 				} else if (typeString == "bbox") {
 					/*BoundingBox value;
-					result = propList.get()->GetProperty(id(valueString.c_str()), out);
+					result = propList->GetProperty(id(valueString.c_str()), out);
 					if (!result) continue;
 					value = *(out->GetValueBBox());
-					bBoxValueMapOverride.emplace(eastl::pair<uint32_t, BoundingBox>{replaceHash, value});*/
+					bBoxValueMapOverride[replaceHash] = value;*/
 				} else if (typeString == "bools") {
 					bool* value;
-					result = propList.get()->GetProperty(id(valueString.c_str()), out);
+					result = propList->GetProperty(id(valueString.c_str()), out);
 					if (!result) continue;
 					value = out->GetValueBool();
 					size = out->GetItemCount();
-					boolValueMapArrayOverride.emplace(eastl::pair<uint32_t, eastl::pair<bool*, uint32_t>>{replaceHash, {value, size}});
+					boolValueMapArrayOverride[replaceHash] = eastl::pair<bool*, uint32_t>{value, size};
 				} else if (typeString == "int32s") {
 					int32_t* value;
-					result = propList.get()->GetProperty(id(valueString.c_str()), out);
+					result = propList->GetProperty(id(valueString.c_str()), out);
 					if (!result) continue;
 					value = out->GetValueInt32();
 					size = out->GetItemCount();
-					int32ValueMapArrayOverride.emplace(eastl::pair<uint32_t, eastl::pair<int32_t*, uint32_t>>{replaceHash, {value, size}});
+					int32ValueMapArrayOverride[replaceHash] = eastl::pair<int32_t*, uint32_t>{value, size};
 				} else if (typeString == "uint32s") {
 					uint32_t* value;
-					result = propList.get()->GetProperty(id(valueString.c_str()), out);
+					result = propList->GetProperty(id(valueString.c_str()), out);
 					if (!result) continue;
 					value = out->GetValueUInt32();
 					size = out->GetItemCount();
-					uint32ValueMapArrayOverride.emplace(eastl::pair<uint32_t, eastl::pair<uint32_t*, uint32_t>>{replaceHash, {value, size}});
+					uint32ValueMapArrayOverride[replaceHash] = eastl::pair<uint32_t*, uint32_t>{value, size};
 				} else if (typeString == "floats") {
 					float* value;
-					result = propList.get()->GetProperty(id(valueString.c_str()), out);
+					result = propList->GetProperty(id(valueString.c_str()), out);
 					if (!result) continue;
 					value = out->GetValueFloat();
 					size = out->GetItemCount();
-					floatValueMapArrayOverride.emplace(eastl::pair<uint32_t, eastl::pair<float*, uint32_t>>{replaceHash, {value, size}});
+					floatValueMapArrayOverride[replaceHash] = eastl::pair<float*, uint32_t>{value, size};
 				} else if (typeString == "string8s") {
 					eastl::string* value;
-					result = propList.get()->GetProperty(id(valueString.c_str()), out);
+					result = propList->GetProperty(id(valueString.c_str()), out);
 					if (!result) continue;
 					value = out->GetValueString8();
 					size = out->GetItemCount();
-					string8ValueMapArrayOverride.emplace(eastl::pair<uint32_t, eastl::pair<eastl::string*, uint32_t>>{replaceHash, {value, size}});
+					string8ValueMapArrayOverride[replaceHash] = eastl::pair<eastl::string*, uint32_t>{value, size};
 				} else if (typeString == "string16s") {
 					eastl::string16* value;
-					result = propList.get()->GetProperty(id(valueString.c_str()), out);
+					result = propList->GetProperty(id(valueString.c_str()), out);
 					if (!result) continue;
 					value = out->GetValueString16();
 					size = out->GetItemCount();
-					string16ValueMapArrayOverride.emplace(eastl::pair<uint32_t, eastl::pair<eastl::string16*, uint32_t>>{replaceHash, {value, size}});
+					string16ValueMapArrayOverride[replaceHash] = eastl::pair<eastl::string16*, uint32_t>{value, size};
 				} else if (typeString == "keys") {
 					ResourceKey* value;
-					result = propList.get()->GetProperty(id(valueString.c_str()), out);
+					result = propList->GetProperty(id(valueString.c_str()), out);
 					if (!result) continue;
 					value = out->GetValueKey();
 					size = out->GetItemCount();
-					keyValueMapArrayOverride.emplace(eastl::pair<uint32_t, eastl::pair<ResourceKey*, uint32_t>>{replaceHash, {value, size}});
+					keyValueMapArrayOverride[replaceHash] = eastl::pair<ResourceKey*, uint32_t>{value, size};
 				} else if (typeString == "texts") {
 					LocalizedString* value;
-					result = propList.get()->GetProperty(id(valueString.c_str()), out);
+					result = propList->GetProperty(id(valueString.c_str()), out);
 					if (!result) continue;
 					value = out->GetValueText();
 					size = out->GetItemCount();
-					textValueMapArrayOverride.emplace(eastl::pair<uint32_t, eastl::pair<LocalizedString*, uint32_t>>{replaceHash, {value, size}});
+					textValueMapArrayOverride[replaceHash] = eastl::pair<LocalizedString*, uint32_t>{value, size};
 				} else if (typeString == "vector2s") {
 					Vector2* value;
-					result = propList.get()->GetProperty(id(valueString.c_str()), out);
+					result = propList->GetProperty(id(valueString.c_str()), out);
 					if (!result) continue;
 					value = out->GetValueVector2();
 					size = out->GetItemCount();
-					vector2ValueMapArrayOverride.emplace(eastl::pair<uint32_t, eastl::pair<Vector2*, uint32_t>>{replaceHash, {value, size}});
+					vector2ValueMapArrayOverride[replaceHash] = eastl::pair<Vector2*, uint32_t>{value, size};
 				} else if (typeString == "vector3s") {
 					Vector3* value;
-					result = propList.get()->GetProperty(id(valueString.c_str()), out);
+					result = propList->GetProperty(id(valueString.c_str()), out);
 					if (!result) continue;
 					value = out->GetValueVector3();
 					size = out->GetItemCount();
-					vector3ValueMapArrayOverride.emplace(eastl::pair<uint32_t, eastl::pair<Vector3*, uint32_t>>{replaceHash, {value, size}});
+					vector3ValueMapArrayOverride[replaceHash] = eastl::pair<Vector3*, uint32_t>{value, size};
 				} else if (typeString == "vector4s") {
 					Vector4* value;
-					result = propList.get()->GetProperty(id(valueString.c_str()), out);
+					result = propList->GetProperty(id(valueString.c_str()), out);
 					if (!result) continue;
 					value = out->GetValueVector4();
 					size = out->GetItemCount();
-					vector4ValueMapArrayOverride.emplace(eastl::pair<uint32_t, eastl::pair<Vector4*, uint32_t>>{replaceHash, {value, size}});
+					vector4ValueMapArrayOverride[replaceHash] = eastl::pair<Vector4*, uint32_t>{value, size};
 				} else if (typeString == "colorrgbs") {
 					ColorRGB* value;
-					result = propList.get()->GetProperty(id(valueString.c_str()), out);
+					result = propList->GetProperty(id(valueString.c_str()), out);
 					if (!result) continue;
 					value = out->GetValueColorRGB();
 					size = out->GetItemCount();
-					colorRGBValueMapArrayOverride.emplace(eastl::pair<uint32_t, eastl::pair<ColorRGB*, uint32_t>>{replaceHash, {value, size}});
+					colorRGBValueMapArrayOverride[replaceHash] = eastl::pair<ColorRGB*, uint32_t>{value, size};
 				} else if (typeString == "colorrgbas") {
 					ColorRGBA* value;
-					result = propList.get()->GetProperty(id(valueString.c_str()), out);
+					result = propList->GetProperty(id(valueString.c_str()), out);
 					if (!result) continue;
 					value = out->GetValueColorRGBA();
 					size = out->GetItemCount();
-					colorRGBAValueMapArrayOverride.emplace(eastl::pair<uint32_t, eastl::pair<ColorRGBA*, uint32_t>>{replaceHash, {value, size}});
+					colorRGBAValueMapArrayOverride[replaceHash] = eastl::pair<ColorRGBA*, uint32_t>{value, size};
 				} else if (typeString == "transforms") {
 					Transform* value;
-					result = propList.get()->GetProperty(id(valueString.c_str()), out);
+					result = propList->GetProperty(id(valueString.c_str()), out);
 					if (!result) continue;
 					value = out->GetValueTransform();
 					size = out->GetItemCount();
-					transformValueMapArrayOverride.emplace(eastl::pair<uint32_t, eastl::pair<Transform*, uint32_t>>{replaceHash, {value, size}});
+					transformValueMapArrayOverride[replaceHash] = eastl::pair<Transform*, uint32_t>{value, size};
 				} else if (typeString == "bboxs") {
 					BoundingBox* value;
-					result = propList.get()->GetProperty(id(valueString.c_str()), out);
+					result = propList->GetProperty(id(valueString.c_str()), out);
 					if (!result) continue;
 					value = out->GetValueBBox();
 					size = out->GetItemCount();
-					bBoxValueMapArrayOverride.emplace(eastl::pair<uint32_t, eastl::pair<BoundingBox*, uint32_t>>{replaceHash, {value, size}});
+					bBoxValueMapArrayOverride[replaceHash] = eastl::pair<BoundingBox*, uint32_t>{value, size};
 				}
 			}
 		}
