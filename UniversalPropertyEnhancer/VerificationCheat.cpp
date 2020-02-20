@@ -1,9 +1,9 @@
 /****************************************************************************
 * Copyright (C) 2018, 2020 Zarklord
 *
-* This file is part of UniversalPropertyReplacement.
+* This file is part of UniversalPropertyEnhancer.
 *
-* UniversalPropertyReplacement is free software: you can redistribute it and/or modify
+* UniversalPropertyEnhancer is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
@@ -14,7 +14,7 @@
 * GNU General Public License for more details.
 *
 * You should have received a copy of the GNU General Public License
-* along with UniversalPropertyReplacement.  If not, see <http://www.gnu.org/licenses/>.
+* along with UniversalPropertyEnhancer.  If not, see <http://www.gnu.org/licenses/>.
 ****************************************************************************/
 
 #include "stdafx.h"
@@ -45,7 +45,7 @@ bool VerifyValue(char16_t*& toverify) {
 	return wcscmp((wchar_t*)toverify, L"1") == 0;
 }
 bool VerifyValue(ResourceKey& toverify) {
-	return toverify.groupID == id("prop_overrides") && toverify.instanceID == id("VerifyUPROverrides") && toverify.typeID == id("prop");
+	return toverify.groupID == id("prop_overrides") && toverify.instanceID == id("VerifyUPEOverrides") && toverify.typeID == id("prop");
 }
 bool VerifyValue(LocalizedString& toverify) {
 	return toverify.GetText() == eastl::string16 {"Name Your Creature"};
@@ -91,12 +91,12 @@ uint32_t GetPropertyId(eastl::string str) {
 
 void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 	PropertyListPtr propList;
-	PropManager.GetPropertyList(id("VerifyUPR"), id("VerifyUPR"), propList);
+	PropManager.GetPropertyList(id("VerifyUPE"), id("VerifyUPE"), propList);
 
 	App::Property* out;
 	bool testFailed = false;
 
-	bool boolTest;
+	bool boolTest = false;
 	App::Property::GetBool(propList.get(), GetPropertyId("bool"), boolTest);
 	if (VerifyValue(boolTest)) {
 		ReportReplacementFailed("bool");
@@ -110,7 +110,7 @@ void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 	}
 	uint32_t uint32Test;
 	App::Property::GetUInt32(propList.get(), GetPropertyId("uint32"), uint32Test);
-	if (VerifyValue(boolTest)) {
+	if (VerifyValue(uint32Test)) {
 		ReportReplacementFailed("uint32");
 		testFailed = true;
 	}
@@ -186,22 +186,22 @@ void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 		ReportReplacementFailed("colorRGBA");
 		testFailed = true;
 	}
-	/*Transform transformTest;
+	Transform transformTest;
 	if (propList->GetProperty(GetPropertyId("transform"), out)) {
 		transformTest = *(out->GetValueTransform());
 		if (VerifyValue(transformTest)) {
 			ReportReplacementFailed("transform");
 			testFailed = true;
 		}
-	}*/
-	/*BoundingBox bBoxTest;
+	}
+	BoundingBox bBoxTest;
 	if (propList->GetProperty(GetPropertyId("bbox"), out)) {
 		bBoxTest = *(out->GetValueBBox());
 		if (VerifyValue(bBoxTest)) {
 			ReportReplacementFailed("bbox");
 			testFailed = true;
 		}
-	}*/
+	}
 
 	uint32_t count;
 
@@ -343,5 +343,29 @@ void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 
 	if (!testFailed) {
 		App::ConsolePrintF("no replacement tests failed!");
+	}
+
+	testFailed = false;
+	bool addTest = false;
+	App::Property::GetBool(propList.get(), id("postinitAdd"), addTest);
+	if (VerifyValue(addTest)) {
+		App::ConsolePrintF("Add Postinit failed!");
+		testFailed = true;
+	}
+	int32_t replaceTest;
+	App::Property::GetInt32(propList.get(), id("postinitReplace"), replaceTest);
+	if (VerifyValue(replaceTest)) {
+		App::ConsolePrintF("Replace Postinit failed!");
+		testFailed = true;
+	}
+	uint32_t remainTest;
+	App::Property::GetUInt32(propList.get(), id("postinitRemain"), remainTest);
+	if (VerifyValue(remainTest)) {
+		App::ConsolePrintF("Remain Postinit failed!");
+		testFailed = true;
+	}
+
+	if (!testFailed) {
+		App::ConsolePrintF("no postinit tests failed!");
 	}
 }

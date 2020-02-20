@@ -13,8 +13,9 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{07FC5B61-B575-4207-B464-AFAE6AF3FC19}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>UniversalPropertyReplacement</RootNamespace>
+    <RootNamespace>UniversalPropertyEnhancer</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>UniversalPropertyEnhancer</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -100,6 +101,7 @@
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="UniversalPropertyPostInit.h" />
     <ClInclude Include="UniversalPropertyReplacement.h" />
     <ClInclude Include="VerificationCheat.h" />
   </ItemGroup>
@@ -116,6 +118,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="UniversalPropertyPostInit.cpp" />
     <ClCompile Include="UniversalPropertyReplacement.cpp" />
     <ClCompile Include="VerificationCheat.cpp" />
   </ItemGroup>

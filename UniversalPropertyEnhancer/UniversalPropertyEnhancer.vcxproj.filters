@@ -5,11 +5,11 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="UniversalPropertyReplacement">
-      <UniqueIdentifier>{3880d018-2395-4502-abfe-4b83e0817aab}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Internal">
       <UniqueIdentifier>{d62ad12d-69d8-4933-8342-03043c9adc22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UniversalPropertyEnhancer">
+      <UniqueIdentifier>{3880d018-2395-4502-abfe-4b83e0817aab}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -20,24 +20,30 @@
       <Filter>Internal</Filter>
     </ClInclude>
     <ClInclude Include="UniversalPropertyReplacement.h">
-      <Filter>UniversalPropertyReplacement</Filter>
+      <Filter>UniversalPropertyEnhancer</Filter>
     </ClInclude>
     <ClInclude Include="VerificationCheat.h">
-      <Filter>UniversalPropertyReplacement</Filter>
+      <Filter>UniversalPropertyEnhancer</Filter>
+    </ClInclude>
+    <ClInclude Include="UniversalPropertyPostInit.h">
+      <Filter>UniversalPropertyEnhancer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
-      <Filter>UniversalPropertyReplacement</Filter>
+      <Filter>UniversalPropertyEnhancer</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Internal</Filter>
     </ClCompile>
     <ClCompile Include="UniversalPropertyReplacement.cpp">
-      <Filter>UniversalPropertyReplacement</Filter>
+      <Filter>UniversalPropertyEnhancer</Filter>
     </ClCompile>
     <ClCompile Include="VerificationCheat.cpp">
-      <Filter>UniversalPropertyReplacement</Filter>
+      <Filter>UniversalPropertyEnhancer</Filter>
+    </ClCompile>
+    <ClCompile Include="UniversalPropertyPostInit.cpp">
+      <Filter>UniversalPropertyEnhancer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

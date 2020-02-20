@@ -1,9 +1,9 @@
 /****************************************************************************
 * Copyright (C) 2018, 2020 Zarklord
 *
-* This file is part of UniversalPropertyReplacement.
+* This file is part of UniversalPropertyEnhancer.
 *
-* UniversalPropertyReplacement is free software: you can redistribute it and/or modify
+* UniversalPropertyEnhancer is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
@@ -14,12 +14,11 @@
 * GNU General Public License for more details.
 *
 * You should have received a copy of the GNU General Public License
-* along with UniversalPropertyReplacement.  If not, see <http://www.gnu.org/licenses/>.
+* along with UniversalPropertyEnhancer.  If not, see <http://www.gnu.org/licenses/>.
 ****************************************************************************/
 
 #include "stdafx.h"
 #include "UniversalPropertyReplacement.h"
-#include "VerificationCheat.h"
 
 namespace UniversalPropertyReplacement {
 	long AttachDetours() {
@@ -31,7 +30,6 @@ namespace UniversalPropertyReplacement {
 		return result;
 	}
 	bool Inititalize() {
-		CheatManager.AddCheat("VerifyUPR", new VerificationCheat());
 		uint32_t groupID = id("prop_overrides");
 		eastl::vector<uint32_t> instanceList{};
 		PropManager.GetAllListIDs(groupID, instanceList);
@@ -126,18 +124,17 @@ namespace UniversalPropertyReplacement {
 					if (!result) continue;
 					colorRGBAValueMapOverride[replaceHash] = value;
 				} else if (typeString == "transform") {
-					/*ManualBreakpoint();
-					Transform value;
+					Transform* value;
 					result = propList->GetProperty(id(valueString.c_str()), out);
 					if (!result) continue;
-					value = *(out->GetValueTransform());
-					transformValueMapOverride[replaceHash] = value;*/
+					value = out->GetValueTransform();
+					transformValueMapArrayOverride[replaceHash] = eastl::pair<Transform*, uint32_t> {value, 1};
 				} else if (typeString == "bbox") {
-					/*BoundingBox value;
+					BoundingBox* value;
 					result = propList->GetProperty(id(valueString.c_str()), out);
 					if (!result) continue;
-					value = *(out->GetValueBBox());
-					bBoxValueMapOverride[replaceHash] = value;*/
+					value = out->GetValueBBox();
+					bBoxValueMapArrayOverride[replaceHash] = eastl::pair<BoundingBox*, uint32_t> {value, 1};
 				} else if (typeString == "bools") {
 					bool* value;
 					result = propList->GetProperty(id(valueString.c_str()), out);
@@ -360,12 +357,13 @@ void ApplyValueMapProperty(App::Property*& prop, uint32_t propertyID) {
 		case App::PropertyType::ColorRGBA: {
 			return ApplyTemplateValueMapProperty(prop, propertyID, colorRGBAValueMapOverride);
 		}
+		/* unreachable properties
 		case App::PropertyType::Transform: {
 			return ApplyTemplateValueMapProperty(prop, propertyID, transformValueMapOverride);
 		}
 		case App::PropertyType::BBox: {
 			return ApplyTemplateValueMapProperty(prop, propertyID, bBoxValueMapOverride);
-		}
+		}*/
 	}
 }
 
