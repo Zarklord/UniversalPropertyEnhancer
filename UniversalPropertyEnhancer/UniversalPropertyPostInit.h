@@ -1,9 +1,9 @@
 /****************************************************************************
-* Copyright (C) 2018 Zarklord
+* Copyright (C) 2020 Zarklord
 *
-* This file is part of UniversalPropertyReplacement.
+* This file is part of UniversalPropertyEnhancer.
 *
-* UniversalPropertyReplacement is free software: you can redistribute it and/or modify
+* UniversalPropertyEnhancer is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
@@ -14,14 +14,18 @@
 * GNU General Public License for more details.
 *
 * You should have received a copy of the GNU General Public License
-* along with UniversalPropertyReplacement.  If not, see <http://www.gnu.org/licenses/>.
+* along with UniversalPropertyEnhancer.  If not, see <http://www.gnu.org/licenses/>.
 ****************************************************************************/
 
-// stdafx.cpp : source file that includes just the standard includes
-// UniversalPropertyReplacement.pch will be the pre-compiled header
-// stdafx.obj will contain the pre-compiled type information
+#pragma once
+#include <Spore/BasicIncludes.h>
+#include <Spore/App/cPropManager.h>
 
-#include "stdafx.h"
+namespace UniversalPropertyPostInit {
+	bool Inititalize();
+	long AttachDetours();
 
-// TODO: reference any additional headers you need in STDAFX.H
-// and not in this file
+	static eastl::vector<eastl::pair<ResourceKey, ResourceKey>> postinits {};
+
+	virtual_detour(GetPropertyList__detour, App::cPropManager, App::IPropManager, bool(uint32_t instanceID, uint32_t groupID, PropertyListPtr& pDst)) {};
+};

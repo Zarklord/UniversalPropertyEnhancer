@@ -1,9 +1,9 @@
 /****************************************************************************
 * Copyright (C) 2018, 2020 Zarklord
 *
-* This file is part of UniversalPropertyReplacement.
+* This file is part of UniversalPropertyEnhancer.
 *
-* UniversalPropertyReplacement is free software: you can redistribute it and/or modify
+* UniversalPropertyEnhancer is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
@@ -14,12 +14,14 @@
 * GNU General Public License for more details.
 *
 * You should have received a copy of the GNU General Public License
-* along with UniversalPropertyReplacement.  If not, see <http://www.gnu.org/licenses/>.
+* along with UniversalPropertyEnhancer.  If not, see <http://www.gnu.org/licenses/>.
 ****************************************************************************/
 
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "stdafx.h"
 #include "UniversalPropertyReplacement.h"
+#include "UniversalPropertyPostInit.h"
+#include "VerificationCheat.h"
 
 void Initialize()
 {
@@ -31,6 +33,8 @@ void Initialize()
 	//  - Add new space tools
 	//  - Change materials
 	UniversalPropertyReplacement::Inititalize();
+	UniversalPropertyPostInit::Inititalize();
+	CheatManager.AddCheat("VerifyUPE", new VerificationCheat());
 }
 
 void Dispose()
@@ -44,6 +48,7 @@ void AttachDetours()
 	// Call the attach() method on any detours you want to add
 	// For example: cViewer_SetRenderType_detour::attach(GetAddress(cViewer, SetRenderType));
 	UniversalPropertyReplacement::AttachDetours();
+	UniversalPropertyPostInit::AttachDetours();
 }
 
 

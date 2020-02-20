@@ -1,9 +1,9 @@
 /****************************************************************************
 * Copyright (C) 2018, 2020 Zarklord
 *
-* This file is part of UniversalPropertyReplacement.
+* This file is part of UniversalPropertyEnhancer.
 *
-* UniversalPropertyReplacement is free software: you can redistribute it and/or modify
+* UniversalPropertyEnhancer is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
@@ -14,7 +14,7 @@
 * GNU General Public License for more details.
 *
 * You should have received a copy of the GNU General Public License
-* along with UniversalPropertyReplacement.  If not, see <http://www.gnu.org/licenses/>.
+* along with UniversalPropertyEnhancer.  If not, see <http://www.gnu.org/licenses/>.
 ****************************************************************************/
 
 #pragma once
@@ -63,10 +63,8 @@ namespace UniversalPropertyReplacement {
 	static eastl::map<uint32_t, ColorRGBA> colorRGBAValueMapOverride {};
 	static eastl::map<uint32_t, eastl::pair<ColorRGBA*, uint32_t>> colorRGBAValueMapArrayOverride {};
 
-	static eastl::map<uint32_t, Transform> transformValueMapOverride {};
 	static eastl::map<uint32_t, eastl::pair<Transform*, uint32_t>> transformValueMapArrayOverride {};
 
-	static eastl::map<uint32_t, BoundingBox> bBoxValueMapOverride {};
 	static eastl::map<uint32_t, eastl::pair<BoundingBox*, uint32_t>> bBoxValueMapArrayOverride {};
 
 	member_detour(GetPropertyAlt__detour, App::PropertyList, bool(uint32_t propertyID, App::Property*& result)) {};

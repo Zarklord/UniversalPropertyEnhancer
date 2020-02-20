@@ -1,9 +1,9 @@
 /****************************************************************************
 * Copyright (C) 2018 Zarklord
 *
-* This file is part of UniversalPropertyReplacement.
+* This file is part of UniversalPropertyEnhancer.
 *
-* UniversalPropertyReplacement is free software: you can redistribute it and/or modify
+* UniversalPropertyEnhancer is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
@@ -14,14 +14,14 @@
 * GNU General Public License for more details.
 *
 * You should have received a copy of the GNU General Public License
-* along with UniversalPropertyReplacement.  If not, see <http://www.gnu.org/licenses/>.
+* along with UniversalPropertyEnhancer.  If not, see <http://www.gnu.org/licenses/>.
 ****************************************************************************/
 
-#pragma once
+// stdafx.cpp : source file that includes just the standard includes
+// UniversalPropertyEnhancer.pch will be the pre-compiled header
+// stdafx.obj will contain the pre-compiled type information
 
-// Including SDKDDKVer.h defines the highest available Windows platform.
+#include "stdafx.h"
 
-// If you wish to build your application for a previous Windows platform, include WinSDKVer.h and
-// set the _WIN32_WINNT macro to the platform you wish to support before including SDKDDKVer.h.
-
-#include <SDKDDKVer.h>
+// TODO: reference any additional headers you need in STDAFX.H
+// and not in this file
