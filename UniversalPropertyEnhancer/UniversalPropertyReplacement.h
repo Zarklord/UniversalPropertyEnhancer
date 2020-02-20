@@ -24,6 +24,8 @@ namespace UniversalPropertyReplacement {
 	bool Inititalize();
 	long AttachDetours();
 
+	static eastl::map<uint32_t, bool> deletePropertyIDs {};
+
 	static eastl::map<uint32_t, bool> boolValueMapOverride {};
 	static eastl::map<uint32_t, eastl::pair<bool*, uint32_t>> boolValueMapArrayOverride {};
 

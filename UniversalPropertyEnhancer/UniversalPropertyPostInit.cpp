@@ -65,6 +65,17 @@ void ApplyPostInits(FN* original_function, T* ClassPtr, uint32_t instanceID, uin
 		if (i.first.groupID == groupID && i.first.instanceID == instanceID) {
 			PropertyListPtr postProp;
 			if (!original_function(ClassPtr, i.second.instanceID, i.second.groupID, postProp)) continue;
+			uint32_t removePropertiesID = id("removeProperties");
+			if (postProp->HasProperty(removePropertiesID)) {
+				uint32_t* properties;
+				size_t count;
+				if (App::Property::GetArrayUInt32(postProp.get(), removePropertiesID, count, properties)) {
+					for (size_t j = 0; j < count; j++) {
+						pDst->RemoveProperty(properties[j]);
+					}
+				}
+				postProp->RemoveProperty(removePropertiesID);
+			}
 			pDst->AddAllPropertiesFrom(postProp.get());
 		}
 	}

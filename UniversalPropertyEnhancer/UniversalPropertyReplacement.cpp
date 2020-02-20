@@ -51,12 +51,16 @@ namespace UniversalPropertyReplacement {
 
 				//as much as GetArrayString8 says it gives a string8 array it doesn't, this took alot of debugging to get this right, the strings are seperated every 0x8 bytes as pointers to the strings.
 				ArgScript::Line PropLine = ArgScript::Line(*(char**)(static_cast<char*>(static_cast<void*>(stringList)) + (0x8 * j)));
-				if (PropLine.GetArgumentsCount() < 3 && PropLine.GetArgumentsCount() > 4) continue;
+				if (PropLine.GetArgumentsCount() > 2 && PropLine.GetArgumentsCount() > 4) continue;
 				typeString = PropLine.GetArgumentAt(0);
-				replaceHash = std::strtoul(PropLine.GetArgumentAt(1), nullptr, 16);
-				valueString = PropLine.GetArgumentAt(2);
-
 				typeString.make_lower();
+
+				replaceHash = std::strtoul(PropLine.GetArgumentAt(1), nullptr, 16);
+				if (typeString == "delete") {
+					deletePropertyIDs[replaceHash] = true;
+					continue;
+				}
+				valueString = PropLine.GetArgumentAt(2);
 
 				if (typeString == "bool") {
 					bool value;
@@ -266,6 +270,10 @@ void ApplyTemplateValueMapArrayProperty(App::Property*& prop, uint32_t propertyI
 }
 
 void ApplyValueMapProperty(App::Property*& prop, uint32_t propertyID) {
+	if (deletePropertyIDs.find(propertyID) != deletePropertyIDs.end()) {
+		prop->Set(App::PropertyType::Void, 0, NULL, 0, 0);
+		return;
+	}
 	if (prop->mnFlags & App::Property::PropertyFlags::kPropertyFlagArray) {
 		switch (prop->mnType) {
 			case App::PropertyType::Bool: {

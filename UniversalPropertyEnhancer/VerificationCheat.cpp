@@ -96,6 +96,11 @@ void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 	App::Property* out;
 	bool testFailed = false;
 
+	bool deleteTest;
+	if (App::Property::GetBool(propList.get(), GetPropertyId("delete"), deleteTest)) {
+		ReportReplacementFailed("delete");
+		testFailed = true;
+	}
 	bool boolTest = false;
 	App::Property::GetBool(propList.get(), GetPropertyId("bool"), boolTest);
 	if (VerifyValue(boolTest)) {
@@ -342,14 +347,20 @@ void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 	}
 
 	if (!testFailed) {
-		App::ConsolePrintF("no replacement tests failed!");
+		App::ConsolePrintF("All replacement tests passed!");
 	}
 
 	testFailed = false;
+
 	bool addTest = false;
 	App::Property::GetBool(propList.get(), id("postinitAdd"), addTest);
 	if (VerifyValue(addTest)) {
 		App::ConsolePrintF("Add Postinit failed!");
+		testFailed = true;
+	}
+	bool removeTest = false;
+	if (App::Property::GetBool(propList.get(), id("postinitRemove"), removeTest)) {
+		App::ConsolePrintF("Remove Postinit failed!");
 		testFailed = true;
 	}
 	int32_t replaceTest;
@@ -366,6 +377,6 @@ void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 	}
 
 	if (!testFailed) {
-		App::ConsolePrintF("no postinit tests failed!");
+		App::ConsolePrintF("All postinit tests passed!");
 	}
 }
