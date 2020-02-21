@@ -61,7 +61,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 	switch (ul_reason_for_call)
 	{
 	case DLL_PROCESS_ATTACH:
-		ModAPI::AddPostInitFunction(Initialize);
+		ModAPI::AddInitFunction(Initialize);
 		ModAPI::AddDisposeFunction(Dispose);
 
 		PrepareDetours(hModule);
