@@ -41,7 +41,7 @@ namespace PaletteIcons {
 	};
 	member_detour(LoadPaletteIconProps__detour, PaletteIconsClass, void()) {};
 	namespace Addresses(PaletteIconsClass) {
-		DefineAddress(storepaletteicondata, ModAPI::ChooseAddress(0x0, 0x690B40));
+		DefineAddress(storepaletteicondata, ModAPI::ChooseAddress(0x67F380, 0x690B40));
 	};
 };
 

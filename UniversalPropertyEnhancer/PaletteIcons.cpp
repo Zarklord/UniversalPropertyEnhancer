@@ -23,7 +23,7 @@
 namespace PaletteIcons {
 	long AttachDetours() {
 		long result = 0;
-		result |= LoadPaletteIconProps__detour::attach(Address(ModAPI::ChooseAddress(0x0, 0x7DB710)));
+		result |= LoadPaletteIconProps__detour::attach(Address(ModAPI::ChooseAddress(0x7DBBA0, 0x7DB710)));
 
 		return result;
 	}
