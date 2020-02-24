@@ -57,8 +57,8 @@ void PaletteIcons::LoadPaletteIconProps__detour::DETOUR() {
 		if (idxptr == this->currentidxptr && this->currentidxptr < this->endptr) {
 			*this->currentidxptr = palettedata;
 			this->currentidxptr++;
-			continue;
+		} else {
+			this->storepaletteicondata(idxptr, &palettedata);
 		}
-		this->storepaletteicondata(idxptr, &palettedata);
 	}
 }
