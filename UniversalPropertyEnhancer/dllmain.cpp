@@ -21,6 +21,7 @@
 #include "stdafx.h"
 #include "UniversalPropertyReplacement.h"
 #include "UniversalPropertyPostInit.h"
+#include "PaletteIcons.h"
 #include "VerificationCheat.h"
 
 void Initialize()
@@ -49,6 +50,7 @@ void AttachDetours()
 	// For example: cViewer_SetRenderType_detour::attach(GetAddress(cViewer, SetRenderType));
 	UniversalPropertyReplacement::AttachDetours();
 	UniversalPropertyPostInit::AttachDetours();
+	PaletteIcons::AttachDetours();
 }
 
 

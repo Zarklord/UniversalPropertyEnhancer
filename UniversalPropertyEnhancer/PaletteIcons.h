@@ -18,15 +18,30 @@
 ****************************************************************************/
 
 #pragma once
-
 #include <Spore/BasicIncludes.h>
-#include <Spore/App/cPropManager.h>
 
-namespace UniversalPropertyPostInit {
-	bool Inititalize();
+namespace PaletteIcons {
 	long AttachDetours();
 
-	static eastl::vector<eastl::pair<ResourceKey, ResourceKey>> postinits {};
+	struct PaletteData {
+		uint32_t ID;
+		int32_t sequence;
+		uint32_t layoutID;
+		ResourceKey icon;
+		ResourceKey bgicon;
+		LocalizedString name;
+	};
 
-	virtual_detour(GetPropertyList__detour, App::cPropManager, App::IPropManager, bool(uint32_t instanceID, uint32_t groupID, PropertyListPtr& pDst)) {};
+	class PaletteIconsClass {
+		public:
+			/* 00h */ PaletteData** startptr;
+			/* 04h */ PaletteData** currentidxptr;
+			/* 08h */ PaletteData** endptr;
+			void storepaletteicondata(PaletteData** src, PaletteData** dst);
+	};
+	member_detour(LoadPaletteIconProps__detour, PaletteIconsClass, void()) {};
+	namespace Addresses(PaletteIconsClass) {
+		DefineAddress(storepaletteicondata, ModAPI::ChooseAddress(0x0, 0x690B40));
+	};
 };
+

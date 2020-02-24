@@ -28,6 +28,9 @@
     <ClInclude Include="UniversalPropertyPostInit.h">
       <Filter>UniversalPropertyEnhancer</Filter>
     </ClInclude>
+    <ClInclude Include="PaletteIcons.h">
+      <Filter>UniversalPropertyEnhancer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -43,6 +46,9 @@
       <Filter>UniversalPropertyEnhancer</Filter>
     </ClCompile>
     <ClCompile Include="UniversalPropertyPostInit.cpp">
+      <Filter>UniversalPropertyEnhancer</Filter>
+    </ClCompile>
+    <ClCompile Include="PaletteIcons.cpp">
       <Filter>UniversalPropertyEnhancer</Filter>
     </ClCompile>
   </ItemGroup>
