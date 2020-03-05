@@ -34,14 +34,8 @@ namespace PaletteIcons {
 
 	class PaletteIconsClass {
 		public:
-			/* 00h */ PaletteData** startptr;
-			/* 04h */ PaletteData** currentidxptr;
-			/* 08h */ PaletteData** endptr;
-			void storepaletteicondata(PaletteData** src, PaletteData** dst);
+			eastl::vector<PaletteData*> paletteicons;
 	};
 	member_detour(LoadPaletteIconProps__detour, PaletteIconsClass, void()) {};
-	namespace Addresses(PaletteIconsClass) {
-		DefineAddress(storepaletteicondata, ModAPI::ChooseAddress(0x67F380, 0x690B40));
-	};
 };
 

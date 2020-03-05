@@ -23,6 +23,6 @@
 
 class VerificationCheat: public ArgScript::ICommand {
 	public:
-	virtual void ParseLine(const ArgScript::Line& line) override;
+		virtual void ParseLine(const ArgScript::Line& line) override;
 };
 

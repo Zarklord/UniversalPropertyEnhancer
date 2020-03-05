@@ -27,7 +27,6 @@ namespace PaletteIcons {
 
 		return result;
 	}
-	auto_METHOD_VOID(PaletteIconsClass, storepaletteicondata, Args(PaletteData** src, PaletteData** dst), Args(src, dst));
 };
 
 using namespace PaletteIcons;
@@ -48,17 +47,10 @@ void PaletteIcons::LoadPaletteIconProps__detour::DETOUR() {
 		if (!App::Property::GetInt32(propList.get(), 0x5D1A718, palettedata->sequence)) continue; /* paletteSetSequenceNumber */
 		if (!App::Property::GetKeyInstanceID(propList.get(), 0x05DFEF47, palettedata->layoutID)) continue; /* paletteSetButtonLayout */
 		if (!App::Property::GetKey(propList.get(), 0x05E4DE4E, palettedata->icon)) continue; /* paletteSetButtonIcon */
-		if (!App::Property::GetKey(propList.get(), 0x05DFEF48, palettedata->bgicon)) continue; /* paletteSetButtonBackgroundIcon */
+		App::Property::GetKey(propList.get(), 0x05DFEF48, palettedata->bgicon); /* paletteSetButtonBackgroundIcon */
 		App::Property::GetText(propList.get(), 0xFE1E2BC2, palettedata->name); /* paletteSetName */
-		PaletteData** idxptr = this->startptr;
-		while (idxptr < this->currentidxptr && palettedata->sequence >= (*idxptr)->sequence) {
-			idxptr++;
-		}
-		if (idxptr == this->currentidxptr && this->currentidxptr < this->endptr) {
-			*this->currentidxptr = palettedata;
-			this->currentidxptr++;
-		} else {
-			this->storepaletteicondata(idxptr, &palettedata);
-		}
+		eastl::vector<PaletteData*>::iterator j;
+		for (j = this->paletteicons.begin(); j != this->paletteicons.end() && palettedata->sequence >= (*j)->sequence; j++) {}
+		this->paletteicons.insert(j, palettedata);
 	}
 }

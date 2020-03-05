@@ -277,7 +277,6 @@ void ApplyValueMapProperty(App::Property*& prop, uint32_t propertyID) {
 	if (prop->mnFlags & App::Property::PropertyFlags::kPropertyFlagArray) {
 		switch (prop->mnType) {
 			case App::PropertyType::Bool: {
-				auto iter = boolValueMapArrayOverride.find(propertyID);
 				return ApplyTemplateValueMapArrayProperty(prop, propertyID, boolValueMapArrayOverride);
 			}
 			case App::PropertyType::Int32: {
