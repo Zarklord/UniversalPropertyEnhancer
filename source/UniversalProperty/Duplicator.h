@@ -1,5 +1,5 @@
 /****************************************************************************
-* Copyright (C) 2020 Zarklord
+* Copyright (C) 2022 Zarklord
 *
 * This file is part of UniversalPropertyEnhancer.
 *
@@ -20,22 +20,30 @@
 #pragma once
 #include <Spore/BasicIncludes.h>
 
-namespace PaletteIcons {
-	long AttachDetours();
+class PropertyListDuplicator
+{
+public:
+	static void Initialize();
+	static void Finalize();
+	static PropertyListDuplicator& Get();
+	static bool Exists();
+	
+	static constexpr uint32_t sGroupID = id("prop_duplications");
+	static constexpr uint32_t sArgumentList = id("duplicateList");
 
-	struct PaletteData {
-		uint32_t ID;
-		int32_t sequence;
-		uint32_t layoutID;
-		ResourceKey icon;
-		ResourceKey bgicon;
-		LocalizedString name;
-	};
+	static void AttachDetours();
+private:
+	PropertyListDuplicator();
+public:
+	~PropertyListDuplicator();
 
-	class PaletteIconsClass {
-		public:
-			eastl::vector<PaletteData*> paletteicons;
-	};
-	member_detour(LoadPaletteIconProps__detour, PaletteIconsClass, void()) {};
+	size_t GetExtraRecordKeys(vector<ResourceKey>& dst, Resource::IKeyFilter* filter);
+private:
+	void LoadDuplicationLists();
+
+	static PropertyListDuplicator* mInstance;
+
+	hash_map<ResourceKey, ResourceKey> mDuplicationMap;
 };
 
+PropertyListDuplicator& GetPropertyListDuplicator();

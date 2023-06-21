@@ -1,5 +1,5 @@
 /****************************************************************************
-* Copyright (C) 2018, 2020 Zarklord
+* Copyright (C) 2020, 2022 Zarklord
 *
 * This file is part of UniversalPropertyEnhancer.
 *
@@ -18,11 +18,28 @@
 ****************************************************************************/
 
 #pragma once
+#include <Spore/BasicIncludes.h>
 
-#include <Spore\Cheats.h>
+namespace PaletteIcons {
+	void AttachDetours();
 
-class VerificationCheat: public ArgScript::ICommand {
-	public:
-		virtual void ParseLine(const ArgScript::Line& line) override;
+	struct PaletteData {
+		uint32_t ID;
+		int32_t sequence;
+		uint32_t layoutID;
+		ResourceKey icon;
+		ResourceKey bgicon;
+		LocalizedString name;
+	};
+
+	class PaletteIconsClass {
+		public:
+			vector<PaletteData*> paletteicons;
+	};
+	
+	constexpr uint32_t paletteSetSequenceNumber		  = 0x5D1A718;
+	constexpr uint32_t paletteSetButtonLayout		  = 0x05DFEF47;
+	constexpr uint32_t paletteSetButtonIcon			  = 0x05E4DE4E;
+	constexpr uint32_t paletteSetButtonBackgroundIcon = 0x05DFEF48;
+	constexpr uint32_t paletteSetName				  = 0xFE1E2BC2;
 };
-

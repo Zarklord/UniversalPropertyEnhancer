@@ -11,6 +11,9 @@
     <Filter Include="UniversalPropertyEnhancer">
       <UniqueIdentifier>{3880d018-2395-4502-abfe-4b83e0817aab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UniversalPropertyEnhancer\UniversalProperty">
+      <UniqueIdentifier>{f1eb2ba8-7b54-4c4c-b7ea-3c6b7c077ed8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -19,16 +22,28 @@
     <ClInclude Include="stdafx.h">
       <Filter>Internal</Filter>
     </ClInclude>
-    <ClInclude Include="UniversalPropertyReplacement.h">
-      <Filter>UniversalPropertyEnhancer</Filter>
-    </ClInclude>
-    <ClInclude Include="VerificationCheat.h">
-      <Filter>UniversalPropertyEnhancer</Filter>
-    </ClInclude>
-    <ClInclude Include="UniversalPropertyPostInit.h">
+    <ClInclude Include="VerifyUPE.h">
       <Filter>UniversalPropertyEnhancer</Filter>
     </ClInclude>
     <ClInclude Include="PaletteIcons.h">
+      <Filter>UniversalPropertyEnhancer</Filter>
+    </ClInclude>
+    <ClInclude Include="PropertyExt.h">
+      <Filter>UniversalPropertyEnhancer</Filter>
+    </ClInclude>
+    <ClInclude Include="UniversalProperty/Duplicator.h">
+      <Filter>UniversalPropertyEnhancer\UniversalProperty</Filter>
+    </ClInclude>
+    <ClInclude Include="UniversalProperty/Replacement.h">
+      <Filter>UniversalPropertyEnhancer\UniversalProperty</Filter>
+    </ClInclude>
+    <ClInclude Include="UniversalProperty/PostInit.h">
+      <Filter>UniversalPropertyEnhancer\UniversalProperty</Filter>
+    </ClInclude>
+    <ClInclude Include="typename.h">
+      <Filter>UniversalPropertyEnhancer</Filter>
+    </ClInclude>
+    <ClInclude Include="ThumbnailTester.h">
       <Filter>UniversalPropertyEnhancer</Filter>
     </ClInclude>
     <ClInclude Include="Property.h">
@@ -42,16 +57,22 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Internal</Filter>
     </ClCompile>
-    <ClCompile Include="UniversalPropertyReplacement.cpp">
-      <Filter>UniversalPropertyEnhancer</Filter>
-    </ClCompile>
-    <ClCompile Include="VerificationCheat.cpp">
-      <Filter>UniversalPropertyEnhancer</Filter>
-    </ClCompile>
-    <ClCompile Include="UniversalPropertyPostInit.cpp">
+    <ClCompile Include="VerifyUPE.cpp">
       <Filter>UniversalPropertyEnhancer</Filter>
     </ClCompile>
     <ClCompile Include="PaletteIcons.cpp">
+      <Filter>UniversalPropertyEnhancer</Filter>
+    </ClCompile>
+    <ClCompile Include="UniversalProperty/Duplicator.cpp">
+      <Filter>UniversalPropertyEnhancer\UniversalProperty</Filter>
+    </ClCompile>
+    <ClCompile Include="UniversalProperty/PostInit.cpp">
+      <Filter>UniversalPropertyEnhancer\UniversalProperty</Filter>
+    </ClCompile>
+    <ClCompile Include="UniversalProperty/Replacement.cpp">
+      <Filter>UniversalPropertyEnhancer\UniversalProperty</Filter>
+    </ClCompile>
+    <ClCompile Include="ThumbnailTester.cpp">
       <Filter>UniversalPropertyEnhancer</Filter>
     </ClCompile>
   </ItemGroup>

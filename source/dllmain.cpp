@@ -19,26 +19,56 @@
 
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "stdafx.h"
-#include "UniversalPropertyReplacement.h"
-#include "UniversalPropertyPostInit.h"
+#include "UniversalProperty/Duplicator.h"
+#include "UniversalProperty/PostInit.h"
+#include "UniversalProperty/Replacement.h"
 #include "PaletteIcons.h"
-#include "VerificationCheat.h"
+#include "VerifyUPE.h"
+
+void Main()
+{
+}
 
 void Initialize()
 {
+<<<<<<< master:UniversalPropertyEnhancer/dllmain.cpp
 	UniversalPropertyReplacement::Inititalize();
 	UniversalPropertyPostInit::Inititalize();
 	CheatManager.AddCheat("VerifyUPE", new VerificationCheat());
+=======
+	//ManualBreakpoint();
+
+	PropertyListDuplicator::Initialize();
+	PropertyListPostInitializer::Initialize();
+	UniversalPropertyReplacer::Initialize();
+}
+
+void PostInitialize()
+{
+	CheatManager.AddCheat("VerifyUPE", new VerifyUPE());
+>>>>>>> current wip:source/dllmain.cpp
 }
 
 void Dispose()
 {
+<<<<<<< master:UniversalPropertyEnhancer/dllmain.cpp
+=======
+	PropertyListDuplicator::Finalize();
+	PropertyListPostInitializer::Finalize();
+	UniversalPropertyReplacer::Finalize();
+>>>>>>> current wip:source/dllmain.cpp
 }
 
 void AttachDetours()
 {
+<<<<<<< master:UniversalPropertyEnhancer/dllmain.cpp
 	UniversalPropertyReplacement::AttachDetours();
 	UniversalPropertyPostInit::AttachDetours();
+=======
+	PropertyListDuplicator::AttachDetours();
+	PropertyListPostInitializer::AttachDetours();
+	UniversalPropertyReplacer::AttachDetours();
+>>>>>>> current wip:source/dllmain.cpp
 	PaletteIcons::AttachDetours();
 }
 
@@ -53,6 +83,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 	{
 	case DLL_PROCESS_ATTACH:
 		ModAPI::AddInitFunction(Initialize);
+		ModAPI::AddPostInitFunction(PostInitialize);
 		ModAPI::AddDisposeFunction(Dispose);
 
 		PrepareDetours(hModule);

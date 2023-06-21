@@ -1,5 +1,5 @@
 /****************************************************************************
-* Copyright (C) 2020 Zarklord
+* Copyright (C) 2018, 2020, 2022 Zarklord
 *
 * This file is part of UniversalPropertyEnhancer.
 *
@@ -19,14 +19,10 @@
 
 #pragma once
 
-#include <Spore/BasicIncludes.h>
-#include <Spore/App/cPropManager.h>
+#include <Spore\Cheats.h>
 
-namespace UniversalPropertyPostInit {
-	bool Inititalize();
-	long AttachDetours();
-
-	static eastl::vector<eastl::pair<ResourceKey, ResourceKey>> postinits {};
-
-	virtual_detour(GetPropertyList__detour, App::cPropManager, App::IPropManager, bool(uint32_t instanceID, uint32_t groupID, PropertyListPtr& pDst)) {};
+class VerifyUPE final : public ArgScript::ICommand {
+	public:
+		virtual void ParseLine(const ArgScript::Line& line) override;
 };
+
