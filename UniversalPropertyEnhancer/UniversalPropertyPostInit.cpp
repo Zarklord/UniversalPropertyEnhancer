@@ -19,6 +19,7 @@
 
 #include "stdafx.h"
 #include "UniversalPropertyPostInit.h"
+#include "Property.h"
 
 namespace UniversalPropertyPostInit {
 	long AttachDetours() {
@@ -30,21 +31,23 @@ namespace UniversalPropertyPostInit {
 	bool Inititalize() {
 		uint32_t groupID = id("prop_postinits");
 		eastl::vector<uint32_t> instanceList {};
-		PropManager.GetAllListIDs(groupID, instanceList);
+		PropManager.GetPropertyListIDs(groupID, instanceList);
 		for (eastl_size_t i = 0; i < instanceList.size(); i++) {
 			PropertyListPtr propList;
 			PropManager.GetPropertyList(instanceList[i], groupID, propList);
 
 			size_t stringCount = 0;
 			eastl::string8* stringList = nullptr;
+			Extensions::Property::array_string_8* altStringList = nullptr;
 			App::Property::GetArrayString8(propList.get(), id("postinitList"), stringCount, stringList);
+			Extensions::Property::GetArrayString8(propList.get(), id("postinitList"), stringCount, altStringList);
+			const bool is_bad_array_string = stringCount > 1 && altStringList[1].mEnd >= altStringList[1].mBegin;
 
 			for (size_t j = 0; j < stringCount; j++) {
 				ResourceKey postinit {};
 				ResourceKey source {};
-
-				//as much as GetArrayString8 says it gives a string8 array it doesn't, this took alot of debugging to get this right, the strings are seperated every 0x8 bytes as pointers to the strings.
-				ArgScript::Line PropLine = ArgScript::Line(*(char**)(static_cast<char*>(static_cast<void*>(stringList)) + (0x8 * j)));
+				
+				ArgScript::Line PropLine = ArgScript::Line(is_bad_array_string ? altStringList[j].mBegin : stringList[j].c_str());
 				if (PropLine.GetArgumentsCount() != 2) continue;
 
 				if (!App::Property::GetKey(propList.get(), id(PropLine.GetArgumentAt(0)), postinit)) continue;
@@ -81,6 +84,7 @@ void ApplyPostInits(FN* original_function, T* ClassPtr, uint32_t instanceID, uin
 	}
 }
 
+template <>
 bool UniversalPropertyPostInit::GetPropertyList__detour::DETOUR(uint32_t instanceID, uint32_t groupID, PropertyListPtr& pDst) {
 	if (!original_function(this, instanceID, groupID, pDst)) return false;
 	ApplyPostInits(original_function, this, instanceID, groupID, pDst);

@@ -37,7 +37,7 @@ void PaletteIcons::LoadPaletteIconProps__detour::DETOUR() {
 	
 	uint32_t groupID = id("paletteicons");
 	eastl::vector<uint32_t> instanceList {};
-	PropManager.GetAllListIDs(groupID, instanceList);
+	PropManager.GetPropertyListIDs(groupID, instanceList);
 
 	for (eastl_size_t i = 0; i < instanceList.size(); i++) {
 		PropertyListPtr propList;

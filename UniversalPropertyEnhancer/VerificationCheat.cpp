@@ -20,6 +20,8 @@
 #include "stdafx.h"
 #include "VerificationCheat.h"
 
+#include "Property.h"
+
 bool VerifyValue(bool& toverify) {
 	return toverify == false;
 }
@@ -92,8 +94,13 @@ uint32_t GetPropertyId(eastl::string str) {
 void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 	PropertyListPtr propList;
 	PropManager.GetPropertyList(id("VerifyUPE"), id("VerifyUPE"), propList);
-
-	App::Property* out;
+	
+	union AppExtProperty
+	{
+		Extensions::Property* ext;
+		App::Property* prop;
+	};
+	AppExtProperty out{nullptr};
 	bool testFailed = false;
 
 	bool deleteTest;
@@ -192,16 +199,16 @@ void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 		testFailed = true;
 	}
 	Transform transformTest;
-	if (propList->GetProperty(GetPropertyId("transform"), out)) {
-		transformTest = *(out->GetValueTransform());
+	if (propList->GetProperty(GetPropertyId("transform"), out.prop)) {
+		transformTest = *(out.ext->GetValueTransform());
 		if (VerifyValue(transformTest)) {
 			ReportReplacementFailed("transform");
 			testFailed = true;
 		}
 	}
 	BoundingBox bBoxTest;
-	if (propList->GetProperty(GetPropertyId("bbox"), out)) {
-		bBoxTest = *(out->GetValueBBox());
+	if (propList->GetProperty(GetPropertyId("bbox"), out.prop)) {
+		bBoxTest = *(out.ext->GetValueBBox());
 		if (VerifyValue(bBoxTest)) {
 			ReportReplacementFailed("bbox");
 			testFailed = true;
@@ -211,135 +218,135 @@ void VerificationCheat::ParseLine(const ArgScript::Line& line) {
 	uint32_t count;
 
 	bool* boolsTest;
-	if (propList->GetProperty(GetPropertyId("bools"), out)) {
-		boolsTest = out->GetValueBool();
-		count = out->GetItemCount();
+	if (propList->GetProperty(GetPropertyId("bools"), out.prop)) {
+		boolsTest = out.ext->GetValueBool();
+		count = out.ext->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(boolsTest[0]) && VerifyValue(boolsTest[1]))) {
 			ReportReplacementFailed("bools");
 			testFailed = true;
 		}
 	}
 	int32_t* int32sTest;
-	if (propList->GetProperty(GetPropertyId("int32s"), out)) {
-		int32sTest = out->GetValueInt32();
-		count = out->GetItemCount();
+	if (propList->GetProperty(GetPropertyId("int32s"), out.prop)) {
+		int32sTest = out.ext->GetValueInt32();
+		count = out.ext->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(int32sTest[0]) && VerifyValue(int32sTest[1]))) {
 			ReportReplacementFailed("int32s");
 			testFailed = true;
 		}
 	}
 	uint32_t* uint32sTest;
-	if (propList->GetProperty(GetPropertyId("uint32s"), out)) {
-		uint32sTest = out->GetValueUInt32();
-		count = out->GetItemCount();
+	if (propList->GetProperty(GetPropertyId("uint32s"), out.prop)) {
+		uint32sTest = out.ext->GetValueUInt32();
+		count = out.ext->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(uint32sTest[0]) && VerifyValue(uint32sTest[1]))) {
 			ReportReplacementFailed("uint32s");
 			testFailed = true;
 		}
 	}
 	float* floatsTest;
-	if (propList->GetProperty(GetPropertyId("floats"), out)) {
-		floatsTest = out->GetValueFloat();
-		count = out->GetItemCount();
+	if (propList->GetProperty(GetPropertyId("floats"), out.prop)) {
+		floatsTest = out.ext->GetValueFloat();
+		count = out.ext->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(floatsTest[0]) && VerifyValue(floatsTest[1]))) {
 			ReportReplacementFailed("floats");
 			testFailed = true;
 		}
 	}
 	eastl::string* string8sTest;
-	if (propList->GetProperty(GetPropertyId("string8s"), out)) {
-		string8sTest = out->GetValueString8();
-		count = out->GetItemCount();
+	if (propList->GetProperty(GetPropertyId("string8s"), out.prop)) {
+		string8sTest = out.ext->GetValueString8();
+		count = out.ext->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(string8sTest[0]) && VerifyValue(string8sTest[1]))) {
 			ReportReplacementFailed("string8s");
 			testFailed = true;
 		}
 	}
 	eastl::string16* string16sTest;
-	if (propList->GetProperty(GetPropertyId("string16s"), out)) {
-		string16sTest = out->GetValueString16();
-		count = out->GetItemCount();
+	if (propList->GetProperty(GetPropertyId("string16s"), out.prop)) {
+		string16sTest = out.ext->GetValueString16();
+		count = out.ext->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(string16sTest[0]) && VerifyValue(string16sTest[1]))) {
 			ReportReplacementFailed("string16s");
 			testFailed = true;
 		}
 	}
 	ResourceKey* keysTest;
-	if (propList->GetProperty(GetPropertyId("keys"), out)) {
-		keysTest = out->GetValueKey();
-		count = out->GetItemCount();
+	if (propList->GetProperty(GetPropertyId("keys"), out.prop)) {
+		keysTest = out.ext->GetValueKey();
+		count = out.ext->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(keysTest[0]) && VerifyValue(keysTest[1]))) {
 			ReportReplacementFailed("keys");
 			testFailed = true;
 		}
 	}
 	LocalizedString* textsTest;
-	if (propList->GetProperty(GetPropertyId("texts"), out)) {
-		textsTest = out->GetValueText();
-		count = out->GetItemCount();
+	if (propList->GetProperty(GetPropertyId("texts"), out.prop)) {
+		textsTest = out.ext->GetValueText();
+		count = out.ext->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(textsTest[0]) && VerifyValue(textsTest[1]))) {
 			ReportReplacementFailed("texts");
 			testFailed = true;
 		}
 	}
 	Vector2* vector2sTest;
-	if (propList->GetProperty(GetPropertyId("vector2s"), out)) {
-		vector2sTest = out->GetValueVector2();
-		count = out->GetItemCount();
+	if (propList->GetProperty(GetPropertyId("vector2s"), out.prop)) {
+		vector2sTest = out.ext->GetValueVector2();
+		count = out.ext->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(vector2sTest[0]) && VerifyValue(vector2sTest[1]))) {
 			ReportReplacementFailed("vector2s");
 			testFailed = true;
 		}
 	}
 	Vector3* vector3sTest;
-	if (propList->GetProperty(GetPropertyId("vector3s"), out)) {
-		vector3sTest = out->GetValueVector3();
-		count = out->GetItemCount();
+	if (propList->GetProperty(GetPropertyId("vector3s"), out.prop)) {
+		vector3sTest = out.ext->GetValueVector3();
+		count = out.ext->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(vector3sTest[0]) && VerifyValue(vector3sTest[1]))) {
 			ReportReplacementFailed("vector3s");
 			testFailed = true;
 		}
 	}
 	Vector4* vector4sTest;
-	if (propList->GetProperty(GetPropertyId("vector4s"), out)) {
-		vector4sTest = out->GetValueVector4();
-		count = out->GetItemCount();
+	if (propList->GetProperty(GetPropertyId("vector4s"), out.prop)) {
+		vector4sTest = out.ext->GetValueVector4();
+		count = out.ext->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(vector4sTest[0]) && VerifyValue(vector4sTest[1]))) {
 			ReportReplacementFailed("vector4s");
 			testFailed = true;
 		}
 	}
 	ColorRGB* colorRGBsTest;
-	if (propList->GetProperty(GetPropertyId("colorRGBs"), out)) {
-		colorRGBsTest = out->GetValueColorRGB();
-		count = out->GetItemCount();
+	if (propList->GetProperty(GetPropertyId("colorRGBs"), out.prop)) {
+		colorRGBsTest = out.ext->GetValueColorRGB();
+		count = out.ext->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(colorRGBsTest[0]) && VerifyValue(colorRGBsTest[1]))) {
 			ReportReplacementFailed("colorRGBs");
 			testFailed = true;
 		}
 	}
 	ColorRGBA* colorRGBAsTest;
-	if (propList->GetProperty(GetPropertyId("colorRGBAs"), out)) {
-		colorRGBAsTest = out->GetValueColorRGBA();
-		count = out->GetItemCount();
+	if (propList->GetProperty(GetPropertyId("colorRGBAs"), out.prop)) {
+		colorRGBAsTest = out.ext->GetValueColorRGBA();
+		count = out.ext->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(colorRGBAsTest[0]) && VerifyValue(colorRGBAsTest[1]))) {
 			ReportReplacementFailed("colorRGBAs");
 			testFailed = true;
 		}
 	}
 	Transform* transformsTest;
-	if (propList->GetProperty(GetPropertyId("transforms"), out)) {
-		transformsTest = out->GetValueTransform();
-		count = out->GetItemCount();
+	if (propList->GetProperty(GetPropertyId("transforms"), out.prop)) {
+		transformsTest = out.ext->GetValueTransform();
+		count = out.ext->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(transformsTest[0]) && VerifyValue(transformsTest[1]))) {
 			ReportReplacementFailed("transforms");
 			testFailed = true;
 		}
 	}
 	BoundingBox* bBoxsTest;
-	if (propList->GetProperty(GetPropertyId("bboxs"), out)) {
-		bBoxsTest = out->GetValueBBox();
-		count = out->GetItemCount();
+	if (propList->GetProperty(GetPropertyId("bboxs"), out.prop)) {
+		bBoxsTest = out.ext->GetValueBBox();
+		count = out.ext->GetItemCount();
 		if (VerifyCount(count) || (VerifyValue(bBoxsTest[0]) && VerifyValue(bBoxsTest[1]))) {
 			ReportReplacementFailed("bboxs");
 			testFailed = true;

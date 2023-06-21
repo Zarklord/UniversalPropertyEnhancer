@@ -26,13 +26,8 @@
 
 void Initialize()
 {
-	// This method is executed when the game starts, before the user interface is shown
-	// Here you can do things such as:
-	//  - Add new cheats
-	//  - Add new simulator classes
-	//  - Add new game modes
-	//  - Add new space tools
-	//  - Change materials
+	ManualBreakpoint();
+
 	UniversalPropertyReplacement::Inititalize();
 	UniversalPropertyPostInit::Inititalize();
 	CheatManager.AddCheat("VerifyUPE", new VerificationCheat());
