@@ -52,17 +52,26 @@ namespace Extensions
 			const char * mEnd;
 		};
 		
-		static bool GetArrayString8(const App::PropertyList* pPropertyList, uint32_t propertyID, size_t& dstCount, array_string_8*& dst)
+		static bool Get8ByteArrayString8(const App::PropertyList* pPropertyList, uint32_t propertyID, size_t& dstCount, array_string_8*& dst)
 		{
-			//as much as GetArrayString8 says it gives a string8 array it doesn't.
-			return App::Property::GetArrayString8(pPropertyList, propertyID, dstCount, reinterpret_cast<eastl::string*&>(dst));
+			dstCount = 0;
+			dst = nullptr;
+
+			App::Property* prop;
+			if (!pPropertyList->GetProperty(propertyID, prop))
+				return false;
+
+			const auto extProp = static_cast<Property*>(prop);
+
+			if (extProp->mnType != App::PropertyType::String8 || !extProp->IsArray() || extProp->GetItemSize() != 8)
+				return false;
+
+			dst = static_cast<array_string_8*>(extProp->GetValue());
+			dstCount = extProp->GetItemCount();
+
+			return true;
 		}
 	};
-
-	inline void CopyProperty(App::Property * prop, App::Property * copy_prop)
-	{
-		memcpy(copy_prop, prop, sizeof(App::Property));
-	}
 
 	inline size_t GetArrayItemCount(App::Property * prop)
 	{

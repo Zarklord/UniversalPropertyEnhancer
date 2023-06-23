@@ -39,9 +39,11 @@ namespace UniversalPropertyPostInit {
 			size_t stringCount = 0;
 			eastl::string8* stringList = nullptr;
 			Extensions::Property::array_string_8* altStringList = nullptr;
-			App::Property::GetArrayString8(propList.get(), id("postinitList"), stringCount, stringList);
-			Extensions::Property::GetArrayString8(propList.get(), id("postinitList"), stringCount, altStringList);
-			const bool is_bad_array_string = stringCount > 1 && altStringList[1].mEnd >= altStringList[1].mBegin;
+			const bool is_bad_array_string = Extensions::Property::Get8ByteArrayString8(propList.get(), id("postinitList"), stringCount, altStringList);
+			if (!is_bad_array_string)
+			{
+				App::Property::GetArrayString8(propList.get(), id("postinitList"), stringCount, stringList);
+			}
 
 			for (size_t j = 0; j < stringCount; j++) {
 				ResourceKey postinit {};
