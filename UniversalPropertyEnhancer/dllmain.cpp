@@ -26,8 +26,6 @@
 
 void Initialize()
 {
-	ManualBreakpoint();
-
 	UniversalPropertyReplacement::Inititalize();
 	UniversalPropertyPostInit::Inititalize();
 	CheatManager.AddCheat("VerifyUPE", new VerificationCheat());
@@ -35,14 +33,10 @@ void Initialize()
 
 void Dispose()
 {
-	// This method is called when the game is closing
 }
 
 void AttachDetours()
 {
-	//ManualBreakpoint();
-	// Call the attach() method on any detours you want to add
-	// For example: cViewer_SetRenderType_detour::attach(GetAddress(cViewer, SetRenderType));
 	UniversalPropertyReplacement::AttachDetours();
 	UniversalPropertyPostInit::AttachDetours();
 	PaletteIcons::AttachDetours();
