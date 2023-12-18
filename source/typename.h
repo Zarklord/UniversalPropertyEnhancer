@@ -80,7 +80,7 @@ template <typename T>
     constexpr std::size_t len = sizeof(impl::RawTypeName<T>()) - leading_junk - impl::format.trailing_junk;
     std::array<char, len> name{};
     for (std::size_t i = 0; i < len-1; i++)
-        name[i] =  impl::RawTypeName<T>()[i + leading_junk];
+        name[i] = impl::RawTypeName<T>()[i + leading_junk];
 
     return name;
 }
@@ -91,6 +91,27 @@ template <typename T>
     static constexpr auto name = CexprTypeName<T>();
     return name.data();
 }
+template <>
+[[nodiscard]] constexpr const char *TypeName<eastl::string8>()
+{
+    return "eastl::string8";
+}
+template <>
+[[nodiscard]] constexpr const char *TypeName<eastl::string8*>()
+{
+    return "eastl::string8*";
+}
+template <>
+[[nodiscard]] constexpr const char *TypeName<eastl::string16>()
+{
+    return "eastl::string16";
+}
+template <>
+[[nodiscard]] constexpr const char *TypeName<eastl::string16*>()
+{
+    return "eastl::string16*";
+}
+
 template <typename T>
 [[nodiscard]] constexpr const char *TypeName(const T &)
 {

@@ -20,6 +20,8 @@
 #include "stdafx.h"
 #include "Duplicator.h"
 
+#include <memory>
+
 #include "Spore/App/cPropManager.h"
 #include "Spore/Resource/cResourceManager.h"
 
@@ -34,6 +36,7 @@ PropertyListDuplicator* PropertyListDuplicator::mInstance = nullptr;
 void PropertyListDuplicator::Initialize()
 {
 	mInstance = new PropertyListDuplicator();
+	mInstance->PostConstruct();
 }
 
 void PropertyListDuplicator::Finalize()
@@ -55,6 +58,11 @@ bool PropertyListDuplicator::Exists()
 PropertyListDuplicator::PropertyListDuplicator()
 {
 	LoadDuplicationLists();
+}
+
+void PropertyListDuplicator::PostConstruct()
+{
+	Test();
 }
 
 PropertyListDuplicator::~PropertyListDuplicator()
@@ -87,10 +95,10 @@ void PropertyListDuplicator::LoadDuplicationLists()
 		PropManager.GetPropertyList(instance, sGroupID, propList);
 
 		size_t stringCount = 0;
-		PropertyExt::array_string_8* stringList = nullptr;
-		PropertyExt::GetArrayString8(propList.get(), sArgumentList, stringCount, stringList);
+		Extensions::Property::array_string8 stringList;
+		Extensions::Property::GetArrayString8(propList.get(), id("postinitList"), stringCount, stringList);
 		for (size_t j = 0; j < stringCount; j++) {
-			ArgScript::Line PropLine = ArgScript::Line(stringList[j].mBegin);
+			ArgScript::Line PropLine = ArgScript::Line(stringList[j].c_str());
 			if (PropLine.GetArgumentsCount() != 2) continue;
 
 			ResourceKey newProp, sourceProp;
@@ -106,6 +114,36 @@ void PropertyListDuplicator::LoadDuplicationLists()
 			mDuplicationMap[newProp] = sourceProp;
 		}
 	}
+}
+
+bool PropertyListDuplicator::GetTestResults(string& error_string) const
+{
+	error_string = mErrorString;
+	return mErrorString.empty();
+}
+
+void PropertyListDuplicator::Test()
+{
+	constexpr auto group_id = id("PropertyListDuplicator");
+
+	const ResourceKey new_prop{id("fake_duplicator_prop"), TypeIDs::prop, group_id};
+	const ResourceKey source_prop{id("real_source_prop"), TypeIDs::prop, group_id};
+	mDuplicationMap[new_prop] = source_prop;
+
+	eastl::vector<ResourceKey> resources;
+	Resource::StandardFileFilter filter(id("fake_duplicator_prop"), group_id, TypeIDs::prop);
+	ResourceManager.GetRecordKeyList(resources, &filter);
+
+	if (eastl::find(resources.begin(), resources.end(), source_prop) == resources.end())
+	{
+		const eastl::string failure = "ResourceKey duplicator failed";
+		ModAPI::Log(failure.c_str());
+		mErrorString += failure + "\n";
+	}
+
+	mDuplicationMap.erase(new_prop);
+
+	ModAPI::Log("PropertyListDuplicator Test Results -> %s", mErrorString.empty() ? "Passed" : "Failed");
 }
 
 virtual_detour(GetRecordKeyList_detour, Resource::cResourceManager, Resource::IResourceManager, size_t(vector<ResourceKey>&, Resource::IKeyFilter*, vector<Resource::Database*>* pDstDatabases))

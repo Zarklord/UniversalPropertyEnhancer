@@ -1,5 +1,5 @@
 /****************************************************************************
-* Copyright (C) 2018, 2020, 2022 Zarklord
+* Copyright (C) 2018, 2020, 2022, 2023 Zarklord
 *
 * This file is part of UniversalPropertyEnhancer.
 *
@@ -18,6 +18,7 @@
 ****************************************************************************/
 
 #pragma once
+#include <memory>
 #include <Spore/BasicIncludes.h>
 #include "PropertyExt.h"
 #include <EASTL/hash_set.h>
@@ -41,12 +42,10 @@ public:
 
 	static constexpr uint32_t sUniversalPropertyReplacerTest = id("UniversalPropertyReplacer");
 
-	template<typename T, App::PropertyType pType, App::Property::PropertyFlags pFlags, uint32_t sType, uint32_t sType2 = 0>
+	template<typename T, App::PropertyType pType, bool IsArray, uint32_t sType, uint32_t sType2 = 0>
 	class ReplaceType : public ReplaceBase
 	{
 	public:
-		static constexpr bool is_array = pFlags == App::Property::PropertyFlags::kPropertyFlagArray;
-
 		ReplaceType()
 		{
 			mPropertyType = pType;
@@ -54,6 +53,10 @@ public:
 
 		~ReplaceType() override
 		{
+			for (const auto& override : valueMapOverride)
+			{
+				delete override.second.first;
+			}
 			valueMapOverride.clear();		
 		}
 
@@ -63,18 +66,26 @@ public:
 			
 			App::Property* prop;
 			if (!prop_list->GetProperty(value_hash, prop)) return false;
-			
-			valueMapOverride[replace_hash] = pair(prop->GetValue(), is_array ? GetArrayItemCount(prop) : 1);
+
+			const auto item_count = IsArray ? Extensions::GetArrayItemCount(prop) : 1;
+			T* value = static_cast<T*>(prop->GetValue());
+			T* new_value = new T[item_count];
+			for (unsigned int i = 0; i < item_count; ++i)
+				new_value[i] = value[i];
+			valueMapOverride[replace_hash] = pair(new_value, item_count);
 
 			return true;
 		}
 
 		void ApplyValueMapProperty(App::Property*& prop, uint32_t propertyID) override
 		{
-			if ((prop->mnFlags & pFlags) != pFlags || prop->mnType != pType) return;
-			auto iter = valueMapOverride.find(propertyID);
+			const Extensions::Property* ext_prop = GetPropertyExt(prop);
+			if (ext_prop->IsArray() != IsArray || prop->mnType != pType) return;
+			const auto iter = valueMapOverride.find(propertyID);
 			if (iter != valueMapOverride.end()) {
-				prop->Set(pType, pFlags, iter->second.first, sizeof(T), iter->second.second);
+				constexpr short clear_flags = ~(Extensions::Property::kPropertyFlagCleanup & Extensions::Property::kPropertyFlagUnk8);
+				const auto flags = static_cast<short>(static_cast<short>(prop->mnFlags & clear_flags) | Extensions::Property::kPropertyFlagSkipDealloc);
+				prop->Set(pType, flags, iter->second.first, sizeof(T), iter->second.second);
 			}
 		}
 
@@ -82,19 +93,22 @@ public:
 		{
 			App::Property prop{};
 
-			constexpr uint32_t test_value_count = is_array ? 2 : 1;
+			constexpr uint32_t test_value_count = IsArray ? 2 : 1;
+			const uint32_t array_size = test_value_count * sizeof(T);
+			const uint32_t cmp_size = std::min(4u, array_size);
 
-			void * test_number = new char[test_value_count * sizeof(T)];
-			void * replace_number = new char[test_value_count * sizeof(T)];
+			const auto test_number = std::make_unique<char[]>(array_size);
+			const auto replace_number = std::make_unique<char[]>(array_size);
 
 			//set some dummy values to distinguish the test vs replaced numbers
-			memset(test_number, 't', 4);
-			memset(replace_number, 'r', 4);
-			
-			prop.Set(pType, pFlags, test_number, sizeof(T), test_value_count );
+			memset(test_number.get(), 't', cmp_size);
+			memset(replace_number.get(), 'r', cmp_size);
+
+			const short flags = (IsArray ? Extensions::Property::kPropertyFlagPointer : Extensions::Property::kPropertyFlagNone) | Extensions::Property::kPropertyFlagSkipDealloc;
+			prop.Set(pType, flags, test_number.get(), sizeof(T), test_value_count);
 			temp_list->SetProperty(sUniversalPropertyReplacerTest, &prop);
 
-			valueMapOverride[sUniversalPropertyReplacerTest] = pair(replace_number, test_value_count);
+			valueMapOverride[sUniversalPropertyReplacerTest] = pair(reinterpret_cast<T*>(replace_number.get()), test_value_count);
 
 			App::Property* get_prop{};
 			temp_list->GetProperty(sUniversalPropertyReplacerTest, get_prop);
@@ -102,21 +116,22 @@ public:
 			
 			valueMapOverride.erase(sUniversalPropertyReplacerTest);
 			
-			const uint32_t prop_value = *static_cast<uint32_t*>(prop.GetValue());
-			const uint32_t get_prop_value = *static_cast<uint32_t*>(get_prop->GetValue());
-			const uint32_t get_prop_object_value = *static_cast<uint32_t*>(get_prop_object->GetValue());
+			const void* prop_value = prop.GetValue();
+			const void* get_prop_value = get_prop->GetValue();
+			const void* get_prop_object_value = get_prop_object->GetValue();
 
 			//get_prop and get_prop_object must be the same, and different from prop
-			if (prop_value == get_prop_value || get_prop_value != get_prop_object_value)
+			if (memcmp(prop_value, get_prop_value, cmp_size) == 0 || memcmp(get_prop_value, get_prop_object_value, cmp_size) != 0)
 			{
-				delete[] static_cast<char*>(replace_number);
-				error_str += string("Failed property replacement for: ") + (is_array ? TypeName<T*>() : TypeName<T>()) + "\n";
+				const eastl::string failure = string("Failed property replacement for: ") + (IsArray ? TypeName<T*>() : TypeName<T>());
+				ModAPI::Log(failure.c_str());
+				error_str += failure + "\n";
 			}
 
 			temp_list->RemoveProperty(sUniversalPropertyReplacerTest);
 		}
 	private:
-		map<uint32_t, pair<void*, uint32_t>> valueMapOverride;
+		map<uint32_t, pair<T*, uint32_t>> valueMapOverride;
 	};
 
 public:
@@ -127,7 +142,6 @@ public:
 	
 	static constexpr uint32_t sGroupID = id("prop_overrides");
 	static constexpr uint32_t sArgumentList = id("replacementList");
-
 	static constexpr uint32_t sDelete = id("delete");
 
 	static void AttachDetours();

@@ -31,12 +31,9 @@ void Main()
 
 void Initialize()
 {
-<<<<<<< master:UniversalPropertyEnhancer/dllmain.cpp
-	UniversalPropertyReplacement::Inititalize();
-	UniversalPropertyPostInit::Inititalize();
-	CheatManager.AddCheat("VerifyUPE", new VerificationCheat());
-=======
-	//ManualBreakpoint();
+#ifdef _DEBUG
+	ManualBreakpoint();
+#endif
 
 	PropertyListDuplicator::Initialize();
 	PropertyListPostInitializer::Initialize();
@@ -46,7 +43,8 @@ void Initialize()
 void PostInitialize()
 {
 	CheatManager.AddCheat("VerifyUPE", new VerifyUPE());
->>>>>>> current wip:source/dllmain.cpp
+
+	ModAPI::Log("Universal Property Enhancer " UPE_VERSION_STRING " Loaded");
 }
 
 void Dispose()
@@ -85,7 +83,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 		ModAPI::AddInitFunction(Initialize);
 		ModAPI::AddPostInitFunction(PostInitialize);
 		ModAPI::AddDisposeFunction(Dispose);
-
+		
 		PrepareDetours(hModule);
 		AttachDetours();
 		CommitDetours();

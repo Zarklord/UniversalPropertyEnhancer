@@ -18,47 +18,144 @@
 ****************************************************************************/
 
 #pragma once
+#include <variant>
 
-class PropertyExt : public App::Property
+namespace Extensions
 {
-public:
-	size_t GetItemCount() const
-	{
-		return this->mnItemCount;
-	}
-	size_t GetItemSize() const
-	{
-		return this->mnItemSize;
-	}
-	bool IsArray() const
-	{
-		return (mnFlags & kPropertyFlagArray) == kPropertyFlagArray;
-	}
-	bool IsNotDirect() const
-	{
-		return (mnFlags & kPropertyFlagNotDirect) == kPropertyFlagNotDirect;
-	}
+	class Property;
+}
 
-	struct array_string_8
+inline const Extensions::Property& GetPropertyExt(const App::Property& prop);
+
+inline Extensions::Property& GetPropertyExt(App::Property& prop);
+
+inline const Extensions::Property* GetPropertyExt(const App::Property* prop);
+
+inline Extensions::Property* GetPropertyExt(App::Property* prop);
+
+namespace Extensions
+{
+	class Property : public App::Property
 	{
-		const char * mBegin;
-		const char * mEnd;
+	public:
+		enum ExtPropertyFlags : short
+		{
+			kPropertyFlagNone = 0x0,
+			kPropertyFlagUnk1 = 0x1,
+			kPropertyFlagUnk2 = 0x2,
+			kPropertyFlagCleanup = 0x4,
+			kPropertyFlagUnk8 = 0x8,
+			kPropertyFlagPointer = 0x10,
+			kPropertyFlagSkipDealloc = 0x20,
+			kPropertyFlagUnk40 = 0x40,
+		};
+
+		operator App::Property*()
+		{
+			return this;
+		}
+
+		size_t GetItemCount() const
+		{
+			return this->mnItemCount;
+		}
+		size_t GetItemSize() const
+		{
+			return this->mnItemSize;
+		}
+		bool NeedsCleanup() const
+		{
+			return (mnFlags & kPropertyFlagCleanup) == kPropertyFlagCleanup;
+		}
+		bool IsArray() const
+		{
+			return (mnFlags & kPropertyFlagPointer) == kPropertyFlagPointer;
+		}
+		bool OwnsMemory() const
+		{
+			return (mnFlags & kPropertyFlagSkipDealloc) != kPropertyFlagSkipDealloc;
+		}
+
+		short GetFlags() const
+		{
+			return mnFlags;
+		}
+
+		struct smfx_array_string_8
+		{
+			const char * begin;
+			const char * end;
+		};
+
+		struct array_string8
+		{			
+			eastl::string8 operator[](std::size_t idx) const
+			{
+				if (std::holds_alternative<smfx_array_string_8*>(dst))
+				{
+					const auto& str = std::get<smfx_array_string_8*>(dst)[idx];
+					return {str.begin, str.end};
+				}
+				else
+				{
+					return std::get<eastl::string8*>(dst)[idx];
+				}
+			}
+			array_string8& operator=(smfx_array_string_8* strs)
+			{
+				dst = strs;
+				return *this;
+			}
+			array_string8& operator=(eastl::string8* strs)
+			{
+				dst = strs;
+				return *this;
+			}
+		private:
+			std::variant<smfx_array_string_8*, eastl::string8*> dst;
+		};
+		
+		static bool GetArrayString8(const App::PropertyList* pPropertyList, uint32_t propertyID, size_t& dstCount, array_string8& dst)
+		{
+			dstCount = 0;
+
+			App::Property* prop;
+			if (!pPropertyList->GetProperty(propertyID, prop))
+				return false;
+
+			const auto ext_prop = GetPropertyExt(prop);
+
+			if (ext_prop->mnType != App::PropertyType::String8 || !ext_prop->IsArray())
+				return false;
+
+			if (ext_prop->GetItemSize() == 8)
+			{
+				dst = static_cast<smfx_array_string_8*>(ext_prop->GetValue());
+			}
+			else
+			{
+				dst = static_cast<eastl::string8*>(ext_prop->GetValue());
+			}
+			dstCount = ext_prop->GetItemCount();
+
+			return true;
+		}
 	};
-	
-	static bool GetArrayString8(const App::PropertyList* pPropertyList, uint32_t propertyID, size_t& dstCount, array_string_8*& dst)
+
+	inline size_t GetArrayItemCount(App::Property* prop)
 	{
-		//as much as GetArrayString8 says it gives a string8 array it doesn't.
-		return Property::GetArrayString8(pPropertyList, propertyID, dstCount, (eastl::string*&)dst);
+		return GetPropertyExt(prop)->GetItemCount();
 	}
-};
-
-inline void CopyProperty(App::Property * prop, App::Property * copy_prop)
-{
-	memcpy(copy_prop, prop, sizeof(App::Property));
 }
 
-inline size_t GetArrayItemCount(App::Property * prop)
-{
-	const auto prop_ex = static_cast<PropertyExt*>(prop);
-	return prop_ex->GetItemCount();
-}
+inline const Extensions::Property& GetPropertyExt(const App::Property& prop)
+{ return static_cast<const Extensions::Property&>(prop); }
+
+inline Extensions::Property& GetPropertyExt(App::Property& prop)
+{ return static_cast<Extensions::Property&>(prop); }
+
+inline const Extensions::Property* GetPropertyExt(const App::Property* prop)
+{ return static_cast<const Extensions::Property*>(prop); }
+
+inline Extensions::Property* GetPropertyExt(App::Property* prop)
+{ return static_cast<Extensions::Property*>(prop); }

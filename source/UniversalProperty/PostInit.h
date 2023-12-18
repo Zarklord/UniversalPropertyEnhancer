@@ -45,10 +45,17 @@ public:
 
 	typedef bool (__thiscall *GetPropertyList)(App::IPropManager* this_ptr, uint32_t instanceID, uint32_t groupID, PropertyListPtr& pDst);
 	void ApplyPostInits(GetPropertyList fn, App::IPropManager* this_ptr, uint32_t instanceID, uint32_t groupID, PropertyListPtr& pDst);
+
+	bool GetTestResults(string& error_string) const;
 private:
 	void LoadPostInitList();
 
+	void PostConstruct();
+	void Test();
+
 	static PropertyListPostInitializer* mInstance;
+
+	string8 mErrorString;
 	
 	vector<pair<ResourceKey, ResourceKey>> mPostInits;
 };

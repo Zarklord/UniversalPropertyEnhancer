@@ -50,54 +50,50 @@ bool UniversalPropertyReplacer::Exists()
 
 
 using PropertyType = App::PropertyType;
-using PropertyFlags = App::Property::PropertyFlags;
-constexpr PropertyFlags ValueProperty = static_cast<PropertyFlags>(0x0);
-constexpr PropertyFlags ArrayProperty = PropertyFlags::kPropertyFlagArray;
-
 UniversalPropertyReplacer::UniversalPropertyReplacer()
 {
-	mValueReplacements.insert(new ReplaceType<bool, PropertyType::Bool, ValueProperty, id("bool")>());
-	mArrayReplacements.insert(new ReplaceType<bool, PropertyType::Bool, ArrayProperty, id("bools")>());
+	mValueReplacements.insert(new ReplaceType<bool, PropertyType::Bool, false, id("bool")>());
+	mArrayReplacements.insert(new ReplaceType<bool, PropertyType::Bool, true, id("bools")>());
 
-	mValueReplacements.insert(new ReplaceType<int32_t, PropertyType::Int32, ValueProperty, id("int32")>());
-	mArrayReplacements.insert(new ReplaceType<int32_t, PropertyType::Int32, ArrayProperty, id("int32s")>());
+	mValueReplacements.insert(new ReplaceType<int32_t, PropertyType::Int32, false, id("int32")>());
+	mArrayReplacements.insert(new ReplaceType<int32_t, PropertyType::Int32, true, id("int32s")>());
 
-	mValueReplacements.insert(new ReplaceType<uint32_t, PropertyType::UInt32, ValueProperty, id("uint32")>());
-	mArrayReplacements.insert(new ReplaceType<uint32_t, PropertyType::UInt32, ArrayProperty, id("uint32s")>());
+	mValueReplacements.insert(new ReplaceType<uint32_t, PropertyType::UInt32, false, id("uint32")>());
+	mArrayReplacements.insert(new ReplaceType<uint32_t, PropertyType::UInt32, true, id("uint32s")>());
 
-	mValueReplacements.insert(new ReplaceType<float, PropertyType::Float, ValueProperty, id("float")>());
-	mArrayReplacements.insert(new ReplaceType<float, PropertyType::Float, ArrayProperty, id("floats")>());
+	mValueReplacements.insert(new ReplaceType<float, PropertyType::Float, false, id("float")>());
+	mArrayReplacements.insert(new ReplaceType<float, PropertyType::Float, true, id("floats")>());
 
-	mValueReplacements.insert(new ReplaceType<string8, PropertyType::String8, ValueProperty, id("string8")>());
-	mArrayReplacements.insert(new ReplaceType<string8, PropertyType::String8, ArrayProperty, id("string8s")>());
+	mValueReplacements.insert(new ReplaceType<string8, PropertyType::String8, false, id("string8")>());
+	mArrayReplacements.insert(new ReplaceType<string8, PropertyType::String8, true, id("string8s")>());
 
-	mValueReplacements.insert(new ReplaceType<string16, PropertyType::String16, ValueProperty, id("string16")>());
-	mArrayReplacements.insert(new ReplaceType<string16, PropertyType::String16, ArrayProperty, id("string16s")>());
+	mValueReplacements.insert(new ReplaceType<string16, PropertyType::String16, false, id("string16")>());
+	mArrayReplacements.insert(new ReplaceType<string16, PropertyType::String16, true, id("string16s")>());
 
-	mValueReplacements.insert(new ReplaceType<ResourceKey, PropertyType::Key, ValueProperty, id("key")>());
-	mArrayReplacements.insert(new ReplaceType<ResourceKey, PropertyType::Key, ArrayProperty, id("keys")>());
+	mValueReplacements.insert(new ReplaceType<ResourceKey, PropertyType::Key, false, id("key")>());
+	mArrayReplacements.insert(new ReplaceType<ResourceKey, PropertyType::Key, true, id("keys")>());
 
-	mValueReplacements.insert(new ReplaceType<LocalizedString, PropertyType::Text, ValueProperty, id("text")>());
-	mArrayReplacements.insert(new ReplaceType<LocalizedString, PropertyType::Text, ArrayProperty, id("texts")>());
+	mValueReplacements.insert(new ReplaceType<LocalizedString, PropertyType::Text, false, id("text")>());
+	mArrayReplacements.insert(new ReplaceType<LocalizedString, PropertyType::Text, true, id("texts")>());
 
-	mValueReplacements.insert(new ReplaceType<Vector2, PropertyType::Vector2, ValueProperty, id("vector2")>());
-	mArrayReplacements.insert(new ReplaceType<Vector2, PropertyType::Vector2, ArrayProperty, id("vector2s")>());
+	mValueReplacements.insert(new ReplaceType<Vector2, PropertyType::Vector2, false, id("vector2")>());
+	mArrayReplacements.insert(new ReplaceType<Vector2, PropertyType::Vector2, true, id("vector2s")>());
 
-	mValueReplacements.insert(new ReplaceType<Vector3, PropertyType::Vector3, ValueProperty, id("vector3")>());
-	mArrayReplacements.insert(new ReplaceType<Vector3, PropertyType::Vector3, ArrayProperty, id("vector3s")>());
+	mValueReplacements.insert(new ReplaceType<Vector3, PropertyType::Vector3, false, id("vector3")>());
+	mArrayReplacements.insert(new ReplaceType<Vector3, PropertyType::Vector3, true, id("vector3s")>());
 
-	mValueReplacements.insert(new ReplaceType<Vector4, PropertyType::Vector4, ValueProperty, id("vector4")>());
-	mArrayReplacements.insert(new ReplaceType<Vector4, PropertyType::Vector4, ArrayProperty, id("vector4s")>());
+	mValueReplacements.insert(new ReplaceType<Vector4, PropertyType::Vector4, false, id("vector4")>());
+	mArrayReplacements.insert(new ReplaceType<Vector4, PropertyType::Vector4, true, id("vector4s")>());
 
-	mValueReplacements.insert(new ReplaceType<ColorRGB, PropertyType::ColorRGB, ValueProperty, id("colorrgb")>());
-	mArrayReplacements.insert(new ReplaceType<ColorRGB, PropertyType::ColorRGB, ArrayProperty, id("colorrgbs")>());
+	mValueReplacements.insert(new ReplaceType<ColorRGB, PropertyType::ColorRGB, false, id("colorrgb")>());
+	mArrayReplacements.insert(new ReplaceType<ColorRGB, PropertyType::ColorRGB, true, id("colorrgbs")>());
 
-	mValueReplacements.insert(new ReplaceType<ColorRGBA, PropertyType::ColorRGBA, ValueProperty, id("colorrgba")>());
-	mArrayReplacements.insert(new ReplaceType<ColorRGBA, PropertyType::ColorRGBA, ArrayProperty, id("colorrgbas")>());
+	mValueReplacements.insert(new ReplaceType<ColorRGBA, PropertyType::ColorRGBA, false, id("colorrgba")>());
+	mArrayReplacements.insert(new ReplaceType<ColorRGBA, PropertyType::ColorRGBA, true, id("colorrgbas")>());
 	
-	mArrayReplacements.insert(new ReplaceType<Transform, PropertyType::Transform, ArrayProperty, id("transforms"), id("transform")>());
+	mArrayReplacements.insert(new ReplaceType<Transform, PropertyType::Transform, true, id("transforms"), id("transform")>());
 	
-	mArrayReplacements.insert(new ReplaceType<BoundingBox, PropertyType::BBox, ArrayProperty, id("bboxs"), id("bbox")>());
+	mArrayReplacements.insert(new ReplaceType<BoundingBox, PropertyType::BBox, true, id("bboxs"), id("bbox")>());
 
 	LoadReplacementLists();
 }
@@ -118,12 +114,13 @@ UniversalPropertyReplacer::~UniversalPropertyReplacer()
 
 void UniversalPropertyReplacer::ApplyValueMapProperty(App::Property*& prop, uint32_t propertyID)
 {
+	const Extensions::Property* ext_prop = GetPropertyExt(prop);
 	if (mDeletePropertyIDs.find(propertyID) != mDeletePropertyIDs.end()) {
 		prop->Set(App::PropertyType::Void, 0, nullptr, 0, 0);
 		return;
 	}
 
-	if ((prop->mnFlags & ArrayProperty) == ArrayProperty)
+	if (ext_prop->IsArray())
 	{
 		const auto replace = mArrayReplacements.find_as(prop->mnType);
 		if (replace != mArrayReplacements.end())
@@ -151,10 +148,10 @@ void UniversalPropertyReplacer::LoadReplacementLists()
 		PropManager.GetPropertyList(instance, sGroupID, propList);
 		
 		size_t stringCount = 0;
-		PropertyExt::array_string_8* stringList = nullptr;
-		PropertyExt::GetArrayString8(propList.get(), sArgumentList, stringCount, stringList);
-		for (size_t j = 0; j < stringCount; j++) {			
-			ArgScript::Line PropLine = ArgScript::Line(stringList[j].mBegin);
+		Extensions::Property::array_string8 stringList;
+		Extensions::Property::GetArrayString8(propList.get(), id("postinitList"), stringCount, stringList);
+		for (size_t j = 0; j < stringCount; j++) {
+			ArgScript::Line PropLine = ArgScript::Line(stringList[j].c_str());
 			if (PropLine.GetArgumentsCount() > 2 && PropLine.GetArgumentsCount() > 4) continue;
 			const uint32_t typeHash = id(PropLine.GetArgumentAt(0));
 
@@ -191,13 +188,12 @@ bool UniversalPropertyReplacer::GetTestResults(string& error_string) const
 
 void UniversalPropertyReplacer::Test()
 {
-	auto* temp_list = new App::PropertyList();
+	const auto temp_list = std::make_unique<App::PropertyList>();
 	
 	App::Property prop{};
 	bool test_property = true;
-	prop.Set(App::PropertyType::Bool, ValueProperty, &test_property, sizeof(bool), 1);
+	prop.Set(App::PropertyType::Bool, Extensions::Property::kPropertyFlagNone, &test_property, sizeof(bool), 1);
 	temp_list->SetProperty(sUniversalPropertyReplacerTest, &prop);
-
 	mDeletePropertyIDs.emplace(sUniversalPropertyReplacerTest);
 	
 	App::Property* get_prop{};
@@ -206,23 +202,24 @@ void UniversalPropertyReplacer::Test()
 
 	if (get_prop->mnType == App::PropertyType::Bool || get_prop_object->mnType == App::PropertyType::Bool)
 	{
-		mErrorString += "Failed property deletion\n";
+		const eastl::string failure = "Failed property deletion";
+		ModAPI::Log(failure.c_str());
+		mErrorString += failure + "\n";
 	}
-
 	mDeletePropertyIDs.erase(sUniversalPropertyReplacerTest);
-
 	temp_list->RemoveProperty(sUniversalPropertyReplacerTest);
 
 
 	for (const auto replacement : mValueReplacements)
 	{
-		replacement->Test(temp_list, mErrorString);
+		replacement->Test(temp_list.get(), mErrorString);
 	}
 
 	for (const auto replacement : mArrayReplacements)
 	{
-		replacement->Test(temp_list, mErrorString);
+		replacement->Test(temp_list.get(), mErrorString);
 	}
+	ModAPI::Log("UniversalPropertyReplacer Test Results -> %s", mErrorString.empty() ? "Passed" : "Failed");
 }
 
 member_detour(GetPropertyAlt_detour, App::PropertyList, bool(uint32_t propertyID, App::Property*& result))

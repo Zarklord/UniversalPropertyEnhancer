@@ -38,10 +38,17 @@ public:
 	~PropertyListDuplicator();
 
 	size_t GetExtraRecordKeys(vector<ResourceKey>& dst, Resource::IKeyFilter* filter);
+
+	bool GetTestResults(string& error_string) const;
 private:
 	void LoadDuplicationLists();
 
+	void PostConstruct();
+	void Test();
+
 	static PropertyListDuplicator* mInstance;
+
+	string8 mErrorString;
 
 	hash_map<ResourceKey, ResourceKey> mDuplicationMap;
 };

@@ -20,6 +20,7 @@
 #include "stdafx.h"
 #include "PostInit.h"
 
+#include "Duplicator.h"
 #include "PropertyExt.h"
 
 PropertyListPostInitializer& GetPropertyListPostInitializer()
@@ -31,6 +32,7 @@ PropertyListPostInitializer* PropertyListPostInitializer::mInstance = nullptr;
 void PropertyListPostInitializer::Initialize()
 {
 	mInstance = new PropertyListPostInitializer();
+	mInstance->PostConstruct();
 }
 
 void PropertyListPostInitializer::Finalize()
@@ -52,6 +54,11 @@ bool PropertyListPostInitializer::Exists()
 PropertyListPostInitializer::PropertyListPostInitializer()
 {
 	LoadPostInitList();
+}
+
+void PropertyListPostInitializer::PostConstruct()
+{
+	Test();
 }
 
 PropertyListPostInitializer::~PropertyListPostInitializer()
@@ -101,10 +108,10 @@ void PropertyListPostInitializer::LoadPostInitList()
 		PropManager.GetPropertyList(instance, sGroupID, propList);
 
 		size_t stringCount = 0;
-		PropertyExt::array_string_8* stringList = nullptr;
-		PropertyExt::GetArrayString8(propList.get(), sArgumentList, stringCount, stringList);
+		Extensions::Property::array_string8 stringList;
+		Extensions::Property::GetArrayString8(propList.get(), id("postinitList"), stringCount, stringList);
 		for (size_t j = 0; j < stringCount; j++) {
-			ArgScript::Line PropLine = ArgScript::Line(stringList[j].mBegin);
+			ArgScript::Line PropLine = ArgScript::Line(stringList[j].c_str());
 			if (PropLine.GetArgumentsCount() != 2) continue;
 
 			ResourceKey postinit, source;
@@ -117,6 +124,122 @@ void PropertyListPostInitializer::LoadPostInitList()
 	}
 }
 
+bool PropertyListPostInitializer::GetTestResults(string& error_string) const
+{
+	error_string = mErrorString;
+	return mErrorString.empty();
+}
+
+void PropertyListPostInitializer::Test()
+{
+	constexpr auto group_id = id("PropertyListPostInitializer");
+	
+	auto* base_property_list_parent = new App::PropertyList();
+	{
+		App::Property parent_property_prop;
+		parent_property_prop.SetValueUInt32(17);
+		base_property_list_parent->SetProperty(id("parent_property"), &parent_property_prop);
+	}
+
+	auto* postinit_property_list_parent = new App::PropertyList();
+	{
+		App::Property postinit_parent_property_prop;
+		postinit_parent_property_prop.SetValueUInt32(12);
+		postinit_property_list_parent->SetProperty(id("postinit_parent_property"), &postinit_parent_property_prop);
+	}
+
+	auto* base_property_list = new App::PropertyList();
+	{
+		base_property_list->SetParent(base_property_list_parent);
+
+		App::Property remove_property_prop;
+		remove_property_prop.SetValueBool(true);
+		base_property_list->SetProperty(id("postinit_remove"), &remove_property_prop);
+
+		App::Property replace_property_prop;
+		replace_property_prop.SetValueInt32(1);
+		base_property_list->SetProperty(id("postinit_replace"), &replace_property_prop);
+
+		App::Property remain_property_prop;
+		remain_property_prop.SetValueInt32(-2);
+		base_property_list->SetProperty(id("postinit_remain"), &remain_property_prop);
+	}
+	
+	uint32_t postinit_remove = id("postinit_remove");
+	auto* postinit_property_list = new App::PropertyList();
+	{
+		App::Property new_parent_prop;
+		new_parent_prop.SetValueKey({id("postinit_property_list_parent"), 0, group_id});
+		postinit_property_list->SetProperty(sNewParent, &new_parent_prop);
+
+		App::Property remove_properties_prop;
+		remove_properties_prop.SetArrayUInt32(&postinit_remove, 1);
+		postinit_property_list->SetProperty(sRemoveProperties, &remove_properties_prop);
+
+		App::Property replace_property_prop;
+		replace_property_prop.SetValueInt32(0);
+		postinit_property_list->SetProperty(id("postinit_replace"), &replace_property_prop);
+
+		App::Property add_property_prop;
+		add_property_prop.SetValueBool(true);
+		postinit_property_list->SetProperty(id("postinit_add"), &add_property_prop);
+	}
+	
+	PropManager.AddPropertyList(base_property_list, id("base_property_list"), group_id);
+	PropManager.AddPropertyList(base_property_list_parent, id("base_property_list_parent"), group_id);
+	PropManager.AddPropertyList(postinit_property_list, id("postinit_property_list"), group_id);
+	PropManager.AddPropertyList(postinit_property_list_parent, id("postinit_property_list_parent"), group_id);
+
+	ResourceKey postinit{id("base_property_list"), 0, group_id};
+	ResourceKey source{id("postinit_property_list"), 0, group_id};
+	const auto postinit_pair = eastl::make_pair(postinit, source);
+	mPostInits.push_back(postinit_pair);
+
+	PropertyListPtr postinit_test;
+	PropManager.GetPropertyList(id("base_property_list"), group_id, postinit_test);
+	{
+		App::Property* prop;
+		if (postinit_test->GetProperty(id("parent_property"), prop) || !postinit_test->GetProperty(id("postinit_parent_property"), prop))
+		{
+			const eastl::string failure = "New Parent postinit failed";
+			ModAPI::Log(failure.c_str());
+			mErrorString += failure + "\n";
+		}
+		if (!postinit_test->GetProperty(id("postinit_remain"), prop))
+		{
+			const eastl::string failure = "Remain postinit failed";
+			ModAPI::Log(failure.c_str());
+			mErrorString += failure + "\n";
+		}
+		if (postinit_test->GetProperty(id("postinit_remove"), prop))
+		{
+			const eastl::string failure = "Remove postinit failed";
+			ModAPI::Log(failure.c_str());
+			mErrorString += failure + "\n";
+		}
+		if (!postinit_test->GetProperty(id("postinit_replace"), prop) || *prop->GetValueInt32() != 0)
+		{
+			const eastl::string failure = "Replace postinit failed";
+			ModAPI::Log(failure.c_str());
+			mErrorString += failure + "\n";
+		}
+		if (postinit_test->GetProperty(sNewParent, prop) || postinit_test->GetProperty(sRemoveProperties, prop))
+		{
+			const eastl::string failure = "Command cleanup postinit failed";
+			ModAPI::Log(failure.c_str());
+			mErrorString += failure + "\n";
+		}
+	}
+
+	const auto it = eastl::find(mPostInits.begin(), mPostInits.end(), postinit_pair);
+	if (it != mPostInits.end()) mPostInits.erase(it);
+
+	PropManager.RemovePropertyList(base_property_list);
+	PropManager.RemovePropertyList(base_property_list_parent);
+	PropManager.RemovePropertyList(postinit_property_list);
+	PropManager.RemovePropertyList(postinit_property_list_parent);
+	ModAPI::Log("PropertyListPostInitializer Test Results -> %s", mErrorString.empty() ? "Passed" : "Failed");
+}
 	
 virtual_detour(GetPropertyList_detour, App::cPropManager, App::IPropManager, bool(uint32_t instanceID, uint32_t groupID, PropertyListPtr& pDst))
 {

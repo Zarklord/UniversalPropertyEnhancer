@@ -30,6 +30,10 @@
 // Windows Header Files:
 #include <windows.h>
 
+#define UPE_VERSION_MAJOR 1
+#define UPE_VERSION_MINOR 2
+#define UPE_VERSION_REV	  0
+#define UPE_VERSION_STRING "v1.2.0"
 
 
 // TODO: reference additional headers your program requires here
