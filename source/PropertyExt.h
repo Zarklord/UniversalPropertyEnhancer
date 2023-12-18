@@ -89,16 +89,15 @@ namespace Extensions
 
 		struct array_string8
 		{			
-			eastl::string8 operator[](std::size_t idx) const
+			const char* operator[](std::size_t idx) const
 			{
 				if (std::holds_alternative<smfx_array_string_8*>(dst))
 				{
-					const auto& str = std::get<smfx_array_string_8*>(dst)[idx];
-					return {str.begin, str.end};
+					return std::get<smfx_array_string_8*>(dst)[idx].begin;
 				}
 				else
 				{
-					return std::get<eastl::string8*>(dst)[idx];
+					return std::get<eastl::string8*>(dst)[idx].c_str();
 				}
 			}
 			array_string8& operator=(smfx_array_string_8* strs)

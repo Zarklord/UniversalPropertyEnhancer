@@ -109,15 +109,21 @@ void PropertyListPostInitializer::LoadPostInitList()
 
 		size_t stringCount = 0;
 		Extensions::Property::array_string8 stringList;
-		Extensions::Property::GetArrayString8(propList.get(), id("postinitList"), stringCount, stringList);
+		Extensions::Property::GetArrayString8(propList.get(), sArgumentList, stringCount, stringList);
 		for (size_t j = 0; j < stringCount; j++) {
-			ArgScript::Line PropLine = ArgScript::Line(stringList[j].c_str());
+			ArgScript::Line PropLine = ArgScript::Line(stringList[j]);
 			if (PropLine.GetArgumentsCount() != 2) continue;
 
 			ResourceKey postinit, source;
 
+			eastl::string8 source_str = PropLine.GetArgumentAt(1);
+
 			if (!App::Property::GetKey(propList.get(), id(PropLine.GetArgumentAt(0)), postinit)) continue;
-			if (!App::Property::GetKey(propList.get(), id(PropLine.GetArgumentAt(1)), source)) continue;
+			if (!App::Property::GetKey(propList.get(), id(source_str.c_str()), source))
+			{
+				source_str.pop_back();
+				if (!App::Property::GetKey(propList.get(), id(source_str.c_str()), source)) continue;
+			}
 
 			mPostInits.emplace_back(postinit, source);
 		}

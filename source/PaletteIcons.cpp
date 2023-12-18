@@ -26,30 +26,16 @@ namespace PaletteIcons {
 		void detoured() {
 			original_function(this);
 			
-			uint32_t groupID = id("paletteicons");
+			constexpr uint32_t groupID = id("paletteicons");
 			vector<uint32_t> instanceList {};
 			PropManager.GetPropertyListIDs(groupID, instanceList);
 
-<<<<<<< master:UniversalPropertyEnhancer/PaletteIcons.cpp
-		return result;
-	}
-};
-
-using namespace PaletteIcons;
-
-void PaletteIcons::LoadPaletteIconProps__detour::DETOUR() {
-
-	original_function(this);
-	
-	uint32_t groupID = id("paletteicons");
-	eastl::vector<uint32_t> instanceList {};
-	PropManager.GetPropertyListIDs(groupID, instanceList);
-=======
-			for (eastl_size_t i = 0; i < instanceList.size(); i++) {
+			for (const unsigned int i : instanceList)
+			{
 				PropertyListPtr propList;
-				if (!PropManager.GetPropertyList(instanceList[i], groupID, propList)) continue;
-				PaletteData* palettedata = new PaletteData {};
-				palettedata->ID = instanceList[i];
+				if (!PropManager.GetPropertyList(i, groupID, propList)) continue;
+				auto palettedata = new PaletteData{};
+				palettedata->ID = i;
 				if (!App::Property::GetInt32(propList.get(), paletteSetSequenceNumber, palettedata->sequence)) { delete palettedata; continue; }
 				if (!App::Property::GetKeyInstanceID(propList.get(), paletteSetButtonLayout, palettedata->layoutID)) { delete palettedata; continue; }
 				if (!App::Property::GetKey(propList.get(), paletteSetButtonIcon, palettedata->icon)) { delete palettedata; continue; }
@@ -61,7 +47,6 @@ void PaletteIcons::LoadPaletteIconProps__detour::DETOUR() {
 			}
 		}
 	};
->>>>>>> current wip:source/PaletteIcons.cpp
 
 	void AttachDetours() {
 		LoadPaletteIconProps_detour::attach(Address(ModAPI::ChooseAddress(0x7DBBA0, 0x7DB710)));

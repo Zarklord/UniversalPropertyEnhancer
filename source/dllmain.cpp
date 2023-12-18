@@ -49,24 +49,16 @@ void PostInitialize()
 
 void Dispose()
 {
-<<<<<<< master:UniversalPropertyEnhancer/dllmain.cpp
-=======
 	PropertyListDuplicator::Finalize();
 	PropertyListPostInitializer::Finalize();
 	UniversalPropertyReplacer::Finalize();
->>>>>>> current wip:source/dllmain.cpp
 }
 
 void AttachDetours()
 {
-<<<<<<< master:UniversalPropertyEnhancer/dllmain.cpp
-	UniversalPropertyReplacement::AttachDetours();
-	UniversalPropertyPostInit::AttachDetours();
-=======
 	PropertyListDuplicator::AttachDetours();
 	PropertyListPostInitializer::AttachDetours();
 	UniversalPropertyReplacer::AttachDetours();
->>>>>>> current wip:source/dllmain.cpp
 	PaletteIcons::AttachDetours();
 }
 

@@ -96,15 +96,21 @@ void PropertyListDuplicator::LoadDuplicationLists()
 
 		size_t stringCount = 0;
 		Extensions::Property::array_string8 stringList;
-		Extensions::Property::GetArrayString8(propList.get(), id("postinitList"), stringCount, stringList);
+		Extensions::Property::GetArrayString8(propList.get(), sArgumentList, stringCount, stringList);
 		for (size_t j = 0; j < stringCount; j++) {
-			ArgScript::Line PropLine = ArgScript::Line(stringList[j].c_str());
+			ArgScript::Line PropLine = ArgScript::Line(stringList[j]);
 			if (PropLine.GetArgumentsCount() != 2) continue;
 
 			ResourceKey newProp, sourceProp;
 
+			eastl::string8 source_str = PropLine.GetArgumentAt(1);
+
 			if (!App::Property::GetKey(propList.get(), id(PropLine.GetArgumentAt(0)), newProp)) continue;
-			if (!App::Property::GetKey(propList.get(), id(PropLine.GetArgumentAt(1)), sourceProp)) continue;
+			if (!App::Property::GetKey(propList.get(), id(source_str.c_str()), sourceProp))
+			{
+				source_str.pop_back();
+				if (!App::Property::GetKey(propList.get(), id(source_str.c_str()), sourceProp)) continue;
+			}
 			if (PropManager.HasPropertyList(newProp.instanceID, newProp.groupID)) continue; //this CANNOT be used to replace files!
 
 			newProp.typeID = TypeIDs::prop;

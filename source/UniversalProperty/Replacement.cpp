@@ -149,24 +149,32 @@ void UniversalPropertyReplacer::LoadReplacementLists()
 		
 		size_t stringCount = 0;
 		Extensions::Property::array_string8 stringList;
-		Extensions::Property::GetArrayString8(propList.get(), id("postinitList"), stringCount, stringList);
+		Extensions::Property::GetArrayString8(propList.get(), sArgumentList, stringCount, stringList);
 		for (size_t j = 0; j < stringCount; j++) {
-			ArgScript::Line PropLine = ArgScript::Line(stringList[j].c_str());
+			ArgScript::Line PropLine = ArgScript::Line(stringList[j]);
 			if (PropLine.GetArgumentsCount() > 2 && PropLine.GetArgumentsCount() > 4) continue;
 			const uint32_t typeHash = id(PropLine.GetArgumentAt(0));
 
-			const uint32_t replaceHash = std::strtoul(PropLine.GetArgumentAt(1), nullptr, 16);
-			if (typeHash == sDelete) {
+			eastl::string replace_str = PropLine.GetArgumentAt(1);
+			const uint32_t replaceHash = std::strtoul(replace_str.c_str(), nullptr, 16);
+			replace_str.pop_back();
+			const uint32_t altReplaceHash = std::strtoul(replace_str.c_str(), nullptr, 16);
+			if (typeHash == sDelete || altReplaceHash == sDelete) {
 				mDeletePropertyIDs.insert(replaceHash);
 				continue;
 			}
 
-			const uint32_t valueHash = id(PropLine.GetArgumentAt(2));
+			eastl::string8 value_str = PropLine.GetArgumentAt(2);
+			const uint32_t valueHash = id(value_str.c_str());
+			value_str.pop_back();
+			const uint32_t altValueHash = id(value_str.c_str());
 
 			bool finished = false;
 			for (const auto replacement : mValueReplacements)
 			{
 				finished = replacement->LoadValueMapProperty(typeHash, propList.get(), valueHash, replaceHash);
+				if (finished) break;
+				finished = replacement->LoadValueMapProperty(typeHash, propList.get(), altValueHash, replaceHash);
 				if (finished) break;
 			}
 			if (finished) continue;
@@ -174,6 +182,8 @@ void UniversalPropertyReplacer::LoadReplacementLists()
 			for (const auto replacement : mArrayReplacements)
 			{
 				finished = replacement->LoadValueMapProperty(typeHash, propList.get(), valueHash, replaceHash);
+				if (finished) break;
+				finished = replacement->LoadValueMapProperty(typeHash, propList.get(), altValueHash, replaceHash);
 				if (finished) break;
 			}
 		}
