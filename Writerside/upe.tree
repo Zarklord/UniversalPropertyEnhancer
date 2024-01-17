@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE instance-profile
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
+
+<instance-profile id="upe" name="Universal Property Enhancer"
+                  start-page="Documentation.md">
+
+    <toc-element topic="Documentation.md" hidden="true"/>
+    <toc-element topic="Property-Replacement.md"/>
+    <toc-element topic="Property-Postinits.md"/>
+    <toc-element topic="Property-List-Duplication.md"/>
+    <toc-element topic="Palette-Icons.md"/>
+</instance-profile>

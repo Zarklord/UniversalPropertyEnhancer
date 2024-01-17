@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<buildprofiles xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/build-profiles.xsd"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <variables>
+        <algolia-api-key>27d4a07e94debd4132df703014b6e331</algolia-api-key>
+    </variables>
+    <build-profile instance="upe">
+        <variables>
+            <algolia-id>5PWXFRPMT2</algolia-id>
+            <algolia-index>UniversalPropertyEnhancer</algolia-index>
+            <noindex-content>false</noindex-content>
+            <web-root>https://zarklord.github.io</web-root>
+            <primary-color>strawberry</primary-color>
+        </variables>
+        <footer>
+            <copyright>Zarklord 2018-2024</copyright>
+        </footer>
+    </build-profile>
+</buildprofiles>
