@@ -3,19 +3,15 @@
 <web-summary>Use UPE to add custom palette icons to your part pages</web-summary>
 <card-summary>Use UPE to add custom palette icons to your part pages</card-summary>
 
-All palette icon data is defined inside the <path>paletteicons</path> folder, so you must first create that folder in your mod.
+## Feature
 
-Create a <path>.prop</path> file with a unique name in the <path>paletteicons</path> folder.
-<warning>
-    <p>
-        Ensure that all prop files in the <path>paletteicons</path> folder have a unique name, if they share a name with another mod, it won't work.
-    </p>
-</warning>
-<tip>
-    <p>
-        It's usually a good idea to use your mod's name, to reduce the chance of conflicting with other mods.
-    </p>
-</tip>
+You can add custom palette icons with this feature, like Creepy & Cute and Bot Parts do.
+
+## Usage
+
+<include from="Snippets.topic" element-id="upe-api-folder"/>
+<var name="upe-api-type" value="palette icon">
+<var name="upe-api-folder" value="paletteicons">
 
 Add the following properties to that prop file:
 
@@ -53,3 +49,9 @@ Then for every page you want to have your icon, add the following property:
 int32 palettePageSetId hash(PALETTEICONPROP)
 ```
 Editing `PALETTEICONPROP` to be the name of your palette icon prop file (excluding the file extension).
+
+<seealso style="cards">
+    <category ref="external">
+        <a href="https://zarklord.github.io/spore/Universal-Property-Enhancer.html" summary="Mod Page">Universal Property Enhancer</a>
+    </category>
+</seealso>

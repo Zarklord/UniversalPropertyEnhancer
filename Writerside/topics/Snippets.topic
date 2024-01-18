@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       title="Snippets" id="Snippets" is-library="true">
+
+    <snippet id="upe-api-folder">
+        <p>All %upe-api-type% data is defined inside the
+            <path>%upe-api-folder%</path>
+            folder, so you must first create that folder in your mod.
+        </p>
+        <p>Create a
+            <path>.prop</path>
+            file with a unique name in the
+            <path>%upe-api-folder%</path>
+            folder.
+        </p>
+        <warning>
+            <p>
+                Ensure that all prop files in the
+                <path>%upe-api-folder%</path>
+                folder have a unique name, if they share a name with another mod, it won't be loaded.
+            </p>
+        </warning>
+        <tip>
+            <p>
+                It's usually a good idea to use your mod's name, to reduce the chance of conflicting with other mods.
+            </p>
+        </tip>
+    </snippet>
+</topic>

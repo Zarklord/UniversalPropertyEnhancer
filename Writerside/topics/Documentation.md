@@ -1,6 +1,6 @@
 # Documentation
 
-You can find developer documentation for Universal Property Enhancer here.
+You can find developer documentation for [Universal Property Enhancer](https://zarklord.github.io/spore/universal-property-enhancer.html) here.
 
 <seealso style="cards">
     <category ref="features">
