@@ -3,13 +3,17 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
     <SporeSdkPath>D:\SourceCode\Spore-ModAPI\</SporeSdkPath>
-	<SporeLauncherPath>D:\Programs\SPORE ModAPI Launcher Kit\</SporeLauncherPath>
+    <SporeLuaSdkPath>D:\SporeDLLMods\Spore-LuaAPI\</SporeLuaSdkPath>
+	<SporeLauncherPath>D:\Programs\Spore ModAPI Launcher Kit\</SporeLauncherPath>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup />
   <ItemGroup>
     <BuildMacro Include="SporeSdkPath">
       <Value>$(SporeSdkPath)</Value>
+    </BuildMacro>
+    <BuildMacro Include="SporeLuaSdkPath">
+      <Value>$(SporeLuaSdkPath)</Value>
     </BuildMacro>
     <BuildMacro Include="SporeLauncherPath">
       <Value>$(SporeLauncherPath)</Value>

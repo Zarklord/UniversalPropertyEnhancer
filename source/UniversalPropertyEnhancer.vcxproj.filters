@@ -1,87 +1,42 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Internal">
-      <UniqueIdentifier>{d62ad12d-69d8-4933-8342-03043c9adc22}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UniversalPropertyEnhancer">
+    <Filter Include="Source">
       <UniqueIdentifier>{3880d018-2395-4502-abfe-4b83e0817aab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UniversalPropertyEnhancer\UniversalProperty">
-      <UniqueIdentifier>{f1eb2ba8-7b54-4c4c-b7ea-3c6b7c077ed8}</UniqueIdentifier>
+    <Filter Include="Source\Features">
+      <UniqueIdentifier>{fab65239-dc01-4103-8295-14bacbb77c9e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
-      <Filter>Internal</Filter>
+      <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>Internal</Filter>
-    </ClInclude>
-    <ClInclude Include="VerifyUPE.h">
-      <Filter>UniversalPropertyEnhancer</Filter>
-    </ClInclude>
-    <ClInclude Include="PaletteIcons.h">
-      <Filter>UniversalPropertyEnhancer</Filter>
-    </ClInclude>
-    <ClInclude Include="PropertyExt.h">
-      <Filter>UniversalPropertyEnhancer</Filter>
-    </ClInclude>
-    <ClInclude Include="UniversalProperty/Duplicator.h">
-      <Filter>UniversalPropertyEnhancer\UniversalProperty</Filter>
-    </ClInclude>
-    <ClInclude Include="UniversalProperty/Replacement.h">
-      <Filter>UniversalPropertyEnhancer\UniversalProperty</Filter>
-    </ClInclude>
-    <ClInclude Include="UniversalProperty/PostInit.h">
-      <Filter>UniversalPropertyEnhancer\UniversalProperty</Filter>
-    </ClInclude>
-    <ClInclude Include="typename.h">
-      <Filter>UniversalPropertyEnhancer</Filter>
-    </ClInclude>
-    <ClInclude Include="ThumbnailTester.h">
-      <Filter>UniversalPropertyEnhancer</Filter>
-    </ClInclude>
-    <ClInclude Include="Property.h">
-      <Filter>UniversalPropertyEnhancer</Filter>
+    <ClInclude Include="pch.h">
+      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Features\PropertyReplacer.cpp">
+      <Filter>Source\Features</Filter>
+    </ClCompile>
+    <ClCompile Include="Features\PropertyListPostInit.cpp">
+      <Filter>Source\Features</Filter>
+    </ClCompile>
+    <ClCompile Include="Features\PropertyListDuplicator.cpp">
+      <Filter>Source\Features</Filter>
+    </ClCompile>
+    <ClCompile Include="Features\PaletteIcons.cpp">
+      <Filter>Source\Features</Filter>
+    </ClCompile>
     <ClCompile Include="dllmain.cpp">
-      <Filter>UniversalPropertyEnhancer</Filter>
-    </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Internal</Filter>
-    </ClCompile>
-    <ClCompile Include="VerifyUPE.cpp">
-      <Filter>UniversalPropertyEnhancer</Filter>
-    </ClCompile>
-    <ClCompile Include="PaletteIcons.cpp">
-      <Filter>UniversalPropertyEnhancer</Filter>
-    </ClCompile>
-    <ClCompile Include="UniversalProperty/Duplicator.cpp">
-      <Filter>UniversalPropertyEnhancer\UniversalProperty</Filter>
-    </ClCompile>
-    <ClCompile Include="UniversalProperty/PostInit.cpp">
-      <Filter>UniversalPropertyEnhancer\UniversalProperty</Filter>
-    </ClCompile>
-    <ClCompile Include="UniversalProperty/Replacement.cpp">
-      <Filter>UniversalPropertyEnhancer\UniversalProperty</Filter>
-    </ClCompile>
-    <ClCompile Include="ThumbnailTester.cpp">
-      <Filter>UniversalPropertyEnhancer</Filter>
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SdkPathConfig.props" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="ReadMe.txt">
-      <Filter>Internal</Filter>
-    </Text>
   </ItemGroup>
 </Project>

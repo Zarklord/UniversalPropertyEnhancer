@@ -1,0 +1,6 @@
+AddOnInitializePropManagerFunction(function()
+	require("upe/palette_icons")
+	require("upe/property_list_duplicator")
+	require("upe/property_list_postinit")
+	require("upe/property_replacer")
+end)

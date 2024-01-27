@@ -13,9 +13,8 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{07FC5B61-B575-4207-B464-AFAE6AF3FC19}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>UniversalPropertyEnhancer</RootNamespace>
+    <RootNamespace>LuaUniversalPropertyEnhancer</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>UniversalPropertyEnhancer</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -45,23 +44,25 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>.\;$(SporeSdkPath)Spore ModAPI;$(SporeSdkPath)EASTL-3.02.01\test\packages\EABase\include\Common;$(SporeSdkPath)EASTL-3.02.01\test\packages\EAAssert\include;$(SporeSdkPath)EASTL-3.02.01\test\packages\EAStdC\include;$(SporeSdkPath)EASTL-3.02.01\include;$(SporeSdkPath)Detours\include\;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(SporeLauncherPath)coreLibs;$(SporeSdkPath)Detours\lib.X86;$(SporeSdkPath)lib\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SporeSdkPath)Spore ModAPI;$(SporeSdkPath)EASTL-3.02.01\test\packages\EABase\include\Common;$(SporeSdkPath)EASTL-3.02.01\test\packages\EAAssert\include;$(SporeSdkPath)EASTL-3.02.01\test\packages\EAStdC\include;$(SporeSdkPath)EASTL-3.02.01\include;$(SporeSdkPath)Detours\include\;$(DXSDK_DIR)Include;$(IncludePath);$(SporeLuaSdkPath)Spore LuaAPI;$(SporeLuaSdkPath)lua54\src</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(SporeLauncherPath)coreLibs;$(SporeLauncherPath)mLibs;$(SporeSdkPath)Detours\lib.X86;$(SporeSdkPath)lib\Debug;$(SporeLuaSdkPath)lib\Debug;$(LibraryPath)</LibraryPath>
     <TargetName>$(ProjectName)</TargetName>
-    <OutDir>$(SporeLauncherPath)mLibs</OutDir>
+    <OutDir>$(SporeLauncherPath)mLibs\</OutDir>
     <LocalDebuggerCommand>$(SporeLauncherPath)Spore ModAPI Launcher.exe</LocalDebuggerCommand>
     <LocalDebuggerWorkingDirectory>$(SporeLauncherPath)</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <IntDir>..\generated\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>.\;$(SporeSdkPath)Spore ModAPI;$(SporeSdkPath)EASTL-3.02.01\test\packages\EABase\include\Common;$(SporeSdkPath)EASTL-3.02.01\test\packages\EAAssert\include;$(SporeSdkPath)EASTL-3.02.01\test\packages\EAStdC\include;$(SporeSdkPath)EASTL-3.02.01\include;$(SporeSdkPath)Detours\include\;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(SporeLauncherPath)coreLibs;$(SporeSdkPath)Detours\lib.X86;$(SporeSdkPath)lib\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SporeSdkPath)Spore ModAPI;$(SporeSdkPath)EASTL-3.02.01\test\packages\EABase\include\Common;$(SporeSdkPath)EASTL-3.02.01\test\packages\EAAssert\include;$(SporeSdkPath)EASTL-3.02.01\test\packages\EAStdC\include;$(SporeSdkPath)EASTL-3.02.01\include;$(SporeSdkPath)Detours\include\;$(DXSDK_DIR)Include;$(IncludePath);$(SporeLuaSdkPath)Spore LuaAPI;$(SporeLuaSdkPath)lua54\src</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(SporeLauncherPath)coreLibs;$(SporeLauncherPath)mLibs;$(SporeSdkPath)Detours\lib.X86;$(SporeSdkPath)lib\Release;$(SporeLuaSdkPath)lib\Release;$(LibraryPath)</LibraryPath>
     <TargetName>$(ProjectName)</TargetName>
-    <OutDir>$(SporeLauncherPath)mLibs</OutDir>
+    <OutDir>$(SporeLauncherPath)mLibs\</OutDir>
     <LocalDebuggerCommand>$(SporeLauncherPath)Spore ModAPI Launcher.exe</LocalDebuggerCommand>
     <LocalDebuggerWorkingDirectory>$(SporeLauncherPath)</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <IntDir>..\generated\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -71,11 +72,12 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>detours.lib;SporeModAPIBase.lib;SporeModAPI.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>detours.lib;SporeModAPIBase.lib;SporeModAPI.lib;SporeLuaAPIBase.lib;1.SporeLuaAPI.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -85,56 +87,36 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SPOREMODAPITEMPLATE_EXPORTS;EXECUTABLE_TYPE=SPORE_STEAM;PATCHED_SPORE=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>detours.lib;SporeModAPIBase.lib;SporeModAPI.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>detours.lib;SporeModAPIBase.lib;SporeModAPI.lib;SporeLuaAPIBase.lib;1.SporeLuaAPI.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
+    <None Include="SdkPathConfig.props" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ThumbnailTester.h" />
-    <ClInclude Include="typename.h" />
-    <ClInclude Include="PropertyExt.h" />
-    <ClInclude Include="PaletteIcons.h" />
-    <ClInclude Include="Property.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="targetver.h" />
-    <ClInclude Include="UniversalProperty/PostInit.h" />
-    <ClInclude Include="UniversalProperty/Replacement.h" />
-    <ClInclude Include="UniversalProperty/Duplicator.h" />
-    <ClInclude Include="VerifyUPE.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="dllmain.cpp">
-      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </PrecompiledHeader>
-      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</CompileAsManaged>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="PaletteIcons.cpp" />
-    <ClCompile Include="stdafx.cpp">
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="Features\PaletteIcons.cpp" />
+    <ClCompile Include="Features\PropertyListDuplicator.cpp" />
+    <ClCompile Include="Features\PropertyListPostInit.cpp" />
+    <ClCompile Include="Features\PropertyReplacer.cpp" />
+    <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="ThumbnailTester.cpp" />
-    <ClCompile Include="UniversalProperty/PostInit.cpp" />
-    <ClCompile Include="UniversalProperty/Replacement.cpp" />
-    <ClCompile Include="UniversalProperty/Duplicator.cpp" />
-    <ClCompile Include="VerifyUPE.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SdkPathConfig.props" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="targetver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
