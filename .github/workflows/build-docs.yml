@@ -17,7 +17,7 @@ env:
   ALGOLIA_APP_NAME: '5PWXFRPMT2'
   ALGOLIA_INDEX_NAME: 'UniversalPropertyEnhancer'
   ALGOLIA_KEY: '${{ secrets.ALGOLIA_KEY }}'
-  CONFIG_JSON_PRODUCT: 'UPE'
+  CONFIG_JSON_PRODUCT: 'UniversalPropertyEnhancer'
 
 jobs:
   build:
