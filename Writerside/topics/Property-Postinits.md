@@ -16,9 +16,10 @@ this is primarily useful in maintaining compatibility with other mods.
 
 ## Usage
 
-<include from="Snippets.topic" element-id="upe-api-folder"/>
-<var name="upe-api-type" value="property postinit">
-<var name="upe-api-folder" value="prop_postinits">
+<include from="Snippets.topic" element-id="upe-api-folder">
+  <var name="upe-api-type" value="property postinit"/>
+  <var name="upe-api-folder" value="prop_postinits"/>
+</include>
 
 In that <path>.prop</path> file, add a string8s array, with each entry postinit-ing another <path>.prop</path> file.
 ```

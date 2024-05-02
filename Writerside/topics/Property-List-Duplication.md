@@ -11,9 +11,10 @@ with this you can maintain one file and duplicate it to the other places.
 
 ## Usage
 
-<include from="Snippets.topic" element-id="upe-api-folder"/>
-<var name="upe-api-type" value="property duplications">
-<var name="upe-api-folder" value="prop_duplications">
+<include from="Snippets.topic" element-id="upe-api-folder">
+    <var name="upe-api-type" value="property duplications"/>
+    <var name="upe-api-folder" value="prop_duplications"/>
+</include>
 
 In that <path>.prop</path> file, add a string8s array, with each entry duplicating a <path>.prop</path> file.
 ```

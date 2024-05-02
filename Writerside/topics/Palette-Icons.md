@@ -9,9 +9,10 @@ You can add custom palette icons with this feature, like Creepy & Cute and Bot P
 
 ## Usage
 
-<include from="Snippets.topic" element-id="upe-api-folder"/>
-<var name="upe-api-type" value="palette icon">
-<var name="upe-api-folder" value="paletteicons">
+<include from="Snippets.topic" element-id="upe-api-folder">
+  <var name="upe-api-type" value="palette icon"/>
+  <var name="upe-api-folder" value="paletteicons"/>
+</include>
 
 Add the following properties to that prop file:
 

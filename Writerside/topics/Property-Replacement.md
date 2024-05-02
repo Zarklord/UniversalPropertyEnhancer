@@ -9,9 +9,10 @@ Allows you to globally modify any property with a new value.
 
 ## Usage
 
-<include from="Snippets.topic" element-id="upe-api-folder"/>
-<var name="upe-api-type" value="property replacement">
-<var name="upe-api-folder" value="prop_overrides">
+<include from="Snippets.topic" element-id="upe-api-folder">
+    <var name="upe-api-type" value="property replacement"/>
+    <var name="upe-api-folder" value="prop_overrides"/>
+</include>
 
 In that <path>.prop</path> file, add a string8s array, with each entry creating a new global property override.
 ```
