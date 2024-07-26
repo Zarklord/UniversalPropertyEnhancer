@@ -44,7 +44,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SporeSdkPath)Spore ModAPI;$(SporeSdkPath)EASTL-3.02.01\test\packages\EABase\include\Common;$(SporeSdkPath)EASTL-3.02.01\test\packages\EAAssert\include;$(SporeSdkPath)EASTL-3.02.01\test\packages\EAStdC\include;$(SporeSdkPath)EASTL-3.02.01\include;$(SporeSdkPath)Detours\include\;$(DXSDK_DIR)Include;$(IncludePath);$(SporeLuaSdkPath)Spore LuaAPI;$(SporeLuaSdkPath)lua54\src</IncludePath>
+    <IncludePath>$(SporeSdkPath)Spore ModAPI;$(SporeSdkPath)EASTL-3.02.01\test\packages\EABase\include\Common;$(SporeSdkPath)EASTL-3.02.01\test\packages\EAAssert\include;$(SporeSdkPath)EASTL-3.02.01\test\packages\EAStdC\include;$(SporeSdkPath)EASTL-3.02.01\include;$(SporeSdkPath)Detours\include\;$(DXSDK_DIR)Include;$(IncludePath);$(SporeLuaSdkPath)Spore LuaAPI;$(SporeLuaSdkPath)lua54\src;$(SporeLuaSdkPath)tracy\tracy\public</IncludePath>
     <LibraryPath>$(DXSDK_DIR)Lib\x86;$(SporeLauncherPath)coreLibs;$(SporeLauncherPath)mLibs;$(SporeSdkPath)Detours\lib.X86;$(SporeSdkPath)lib\Debug;$(SporeLuaSdkPath)lib\Debug;$(LibraryPath)</LibraryPath>
     <TargetName>$(ProjectName)</TargetName>
     <OutDir>$(SporeLauncherPath)mLibs\</OutDir>
@@ -55,7 +55,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SporeSdkPath)Spore ModAPI;$(SporeSdkPath)EASTL-3.02.01\test\packages\EABase\include\Common;$(SporeSdkPath)EASTL-3.02.01\test\packages\EAAssert\include;$(SporeSdkPath)EASTL-3.02.01\test\packages\EAStdC\include;$(SporeSdkPath)EASTL-3.02.01\include;$(SporeSdkPath)Detours\include\;$(DXSDK_DIR)Include;$(IncludePath);$(SporeLuaSdkPath)Spore LuaAPI;$(SporeLuaSdkPath)lua54\src</IncludePath>
+    <IncludePath>$(SporeSdkPath)Spore ModAPI;$(SporeSdkPath)EASTL-3.02.01\test\packages\EABase\include\Common;$(SporeSdkPath)EASTL-3.02.01\test\packages\EAAssert\include;$(SporeSdkPath)EASTL-3.02.01\test\packages\EAStdC\include;$(SporeSdkPath)EASTL-3.02.01\include;$(SporeSdkPath)Detours\include\;$(DXSDK_DIR)Include;$(IncludePath);$(SporeLuaSdkPath)Spore LuaAPI;$(SporeLuaSdkPath)lua54\src;$(SporeLuaSdkPath)tracy\tracy\public</IncludePath>
     <LibraryPath>$(DXSDK_DIR)Lib\x86;$(SporeLauncherPath)coreLibs;$(SporeLauncherPath)mLibs;$(SporeSdkPath)Detours\lib.X86;$(SporeSdkPath)lib\Release;$(SporeLuaSdkPath)lib\Release;$(LibraryPath)</LibraryPath>
     <TargetName>$(ProjectName)</TargetName>
     <OutDir>$(SporeLauncherPath)mLibs\</OutDir>
@@ -69,7 +69,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;TRACY_ENABLE;TRACY_ON_DEMAND;TRACY_IMPORTS;TracyLine=TracyConcat(__LINE__,U);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -87,7 +87,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;TRACY_ENABLE;TRACY_ON_DEMAND;TRACY_IMPORTS;TracyLine=TracyConcat(__LINE__,U);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>

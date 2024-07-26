@@ -79,7 +79,7 @@ local function ApplyPropertyListPostInit(source_prop_list, prop_list)
 	prop_list:AddAllPropertiesFrom(source_prop_list)
 end
 
-SetPropertyListPostInitFunction(function(prop_list, instance_id, group_id)
+local function ExecutePropSpecificPostInits(prop_list, instance_id, group_id)
 	local group_instances = postinit_groups[group_id]
 	if not group_instances then
 		return
@@ -100,4 +100,40 @@ SetPropertyListPostInitFunction(function(prop_list, instance_id, group_id)
 			end
 		end
 	end
+end
+
+local ExecutePropPostInit_Pre, ExecutePropPostInit_Post
+
+SetPropertyListPostInitFunction(function(prop_list, instance_id, group_id)
+	ExecutePropPostInit_Pre(prop_list, instance_id, group_id)
+	ExecutePropSpecificPostInits(prop_list, instance_id, group_id)
+	ExecutePropPostInit_Post(prop_list, instance_id, group_id)
 end)
+
+-------------------------------------------------------------------------------------------
+--------------------------------------------API--------------------------------------------
+-------------------------------------------------------------------------------------------
+
+AddPropPostInit_Pre, RemovePropPostInit_Pre, ExecutePropPostInit_Pre = GenerateCallbackExecuter()
+AddPropPostInit_Post, RemovePropPostInit_Post, ExecutePropPostInit_Post = GenerateCallbackExecuter()
+
+function AddPropSpecificPostInit(group_id, instance_id, postinit)
+	local group_instances = postinit_groups[group_id]
+	if not group_instances then
+		group_instances = {}
+		postinit_groups[group_id] = group_instances
+	end
+
+	group_instances[instance_id] = postinit
+end
+
+function RemovePropSpecificPostInit(group_id, instance_id)
+	local group_instances = postinit_groups[group_id]
+	if not group_instances then
+		return
+	end
+	group_instances[instance_id] = nil
+	if next(group_instances) == nil then
+		postinit_groups[group_id] = nil
+	end
+end

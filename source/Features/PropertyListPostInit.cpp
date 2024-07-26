@@ -1,3 +1,22 @@
+/****************************************************************************
+* Copyright (C) 2018-2024 Zarklord
+*
+* This file is part of UniversalPropertyEnhancer.
+*
+* UniversalPropertyEnhancer is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with UniversalPropertyEnhancer.  If not, see <http://www.gnu.org/licenses/>.
+****************************************************************************/
+
 #include "pch.h"
 
 #include "LuaSpore/LuaSporeCallbacks.h"
@@ -5,34 +24,40 @@
 
 #include <Spore/App/cPropManager.h>
 
-virtual_detour(GetPropertyList_detour, App::cPropManager, App::IPropManager, bool(uint32_t instanceID, uint32_t groupID, PropertyListPtr& pDst))
-{
-	bool detoured(uint32_t instanceID, uint32_t groupID, PropertyListPtr& pDst)
-	{
-		if (!original_function(this, instanceID, groupID, pDst)) return false;
-		LUA_THREAD_SAFETY();
-		if (sApplyPropertyListPostInit.valid())
-		{
-			sApplyPropertyListPostInit(pDst, instanceID, groupID);
-		}
-		return true;
-	}
+static LuaMultiReference<sol::function> sApplyPropertyListPostInit;
 
-	static inline sol::function sApplyPropertyListPostInit;
-};
-
-OnLuaInit(sol::state_view s)
+OnLuaInit(sol::state_view s, bool is_main_state)
 {
-	s["SetPropertyListPostInitFunction"] = [](const sol::function& fn)
+	s["SetPropertyListPostInitFunction"] = [](const sol::this_state L, const sol::function& fn)
 	{
-		GetPropertyList_detour::sApplyPropertyListPostInit = fn;
+		sApplyPropertyListPostInit.set(L, fn);
 	};
 }
 
-OnLuaDispose(sol::state_view s)
+OnLuaDispose(sol::state_view s, bool is_main_state)
 {
-	GetPropertyList_detour::sApplyPropertyListPostInit.reset();
+	sApplyPropertyListPostInit.clear(s);
 }
+
+virtual_detour(GetPropertyList_detour, App::cPropManager, App::IPropManager, bool(uint32_t instanceID, uint32_t groupID, PropertyListPtr& pDst))
+{
+	bool detoured(uint32_t instanceID, uint32_t groupID, PropertyListPtr& pDst) //NOLINT
+	{
+		if (!original_function(this, instanceID, groupID, pDst)) return false;
+		
+		if (sApplyPropertyListPostInit)
+		{
+			GetLuaSpore().ExecuteOnFreeState([&pDst, instanceID, groupID](const sol::state_view& s)
+			{
+				if (auto fn = sApplyPropertyListPostInit.get(s))
+				{
+					fn.value()(pDst, instanceID, groupID);
+				}
+			});
+		}
+		return true;
+	}
+};
 
 AddSporeDetours()
 {

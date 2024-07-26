@@ -63,3 +63,15 @@ SetPropertyListDuplicatorFunction(function(filter)
 	end
 	return prop_keys
 end)
+
+-------------------------------------------------------------------------------------------
+--------------------------------------------API--------------------------------------------
+-------------------------------------------------------------------------------------------
+
+function AddDuplicatedPropertyList(target_prop_key, source_prop_key)
+	duplication_map[target_prop_key] = source_prop_key
+end
+
+function ClearDuplicatedPropertyList(target_prop_key)
+	duplication_map[target_prop_key] = nil
+end

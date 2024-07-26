@@ -36,9 +36,10 @@ local type_name_to_property_type =
 	["delete"] = "delete",
 }
 
-local replacement_map = {universal = {}}
+local universal_replacements = {}
+local type_replacement_map = {}
 
-local function DeleteProperty(property)
+local function DeleteProperty(id, property, prop_list)
 	property:SetType(PropertyType.Void)
 end
 
@@ -65,7 +66,8 @@ local function ProcessArgument(arguments, prop_list)
 	local value_string = arguments[3]
 
 	if property_type == "delete" then
-		replacement_map.universal[replace_hash] = DeleteProperty
+		universal_replacements[replace_hash] = DeleteProperty
+		return
 	end
 
 	local value_property = prop_list:GetProperty(fnv_id(value_string))
@@ -83,8 +85,8 @@ local function ProcessArgument(arguments, prop_list)
 	local prop = Property(property_type)
 	prop:CopyFrom(value_property)
 
-	replacement_map[property_type] = replacement_map[property_type] or {}
-	replacement_map[property_type][replace_hash] = prop
+	type_replacement_map[property_type] = type_replacement_map[property_type] or {}
+	type_replacement_map[property_type][replace_hash] = prop
 end
 
 for i, instance_id in ipairs(PropManager:GetPropertyListIds(search_group_id)) do
@@ -98,25 +100,61 @@ for i, instance_id in ipairs(PropManager:GetPropertyListIds(search_group_id)) do
 	end
 end
 
+local function DoReplacement(replacer, id, property, prop_list)
+	if type(replacer) == "function" then
+		replacer(id, property, prop_list)
+	else
+		property:ReferenceFrom(replacer)
+	end
+end
+
+local ExecutePropReplacers
+
 SetPropertyReplacerFunction(function(id, property, prop_list)
-	local universal_replacer = replacement_map.universal[id]
-	if universal_replacer then
-		if type(universal_replacer) == "function" then
-			universal_replacer(property, prop_list, id)
-		else
-			property:ReferenceFrom(universal_replacer)
-		end
+	if ExecutePropReplacers(id, property, prop_list) then
 		return
 	end
 
-	local type_replacement_map = replacement_map[property:GetPropertyType()]
-	local replacer = type_replacement_map and type_replacement_map[id]
+	local universal_replacer = universal_replacements[id]
+	if universal_replacer then
+		DoReplacement(universal_replacer, id, property, prop_list)
+		return
+	end
+
+	local id_replacment_map = type_replacement_map[property:GetPropertyType()]
+	local replacer = id_replacment_map and id_replacment_map[id]
 	if replacer then
-		if type(replacer) == "function" then
-			replacer(property, prop_list, id)
-		else
-			property:ReferenceFrom(replacer)
-		end
+		DoReplacement(replacer, id, property, prop_list)
 		return
 	end
 end)
+
+-------------------------------------------------------------------------------------------
+--------------------------------------------API--------------------------------------------
+-------------------------------------------------------------------------------------------
+
+AddPropReplacerFunction, RemovePropReplacerFunction, ExecutePropReplacers = GenerateCallbackExecuter()
+
+function AddUniversalPropertyReplacer(id, replacer)
+	universal_replacements[id] = replacer
+end
+
+function RemoveUniversalPropertyReplacer(id)
+	universal_replacements[id] = nil
+end
+
+function AddTypedPropertyReplacer(property_type, id, replacer)
+	type_replacement_map[property_type] = type_replacement_map[property_type] or {}
+	type_replacement_map[property_type][id] = replacer
+end
+
+function RemoveTypedPropertyReplacer(property_type, id)
+	local id_replacment_map = type_replacement_map[property_type]
+	if not id_replacment_map then
+		return
+	end
+	id_replacment_map[id] = nil
+	if next(id_replacment_map) == nil then
+		type_replacement_map[property_type] = nil
+	end
+end

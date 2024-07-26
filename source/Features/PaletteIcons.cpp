@@ -1,9 +1,30 @@
+/****************************************************************************
+* Copyright (C) 2018-2024 Zarklord
+*
+* This file is part of UniversalPropertyEnhancer.
+*
+* UniversalPropertyEnhancer is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with UniversalPropertyEnhancer.  If not, see <http://www.gnu.org/licenses/>.
+****************************************************************************/
+
 #include "pch.h"
 
 #include "LuaSpore/LuaSporeCallbacks.h"
 #include "LuaSpore/SporeDetours.h"
 
 #include <Spore/Resource/cResourceManager.h>
+
+static sol::function sGetPaletteIcons;
 
 struct PaletteIcon {
 	uint32_t id;
@@ -19,36 +40,7 @@ class PaletteIcons {
 		vector<PaletteIcon*> mPaletteIcons;
 };
 
-member_detour(LoadPaletteIconProps_detour, PaletteIcons, void())
-{
-	void detoured()
-	{
-		original_function(this);
-		
-		LUA_THREAD_SAFETY();
-		if (sGetPaletteIcons.valid())
-		{
-			const sol::table palette_icons = sGetPaletteIcons();
-			const size_t palette_icons_size = palette_icons.size();
-
-			mPaletteIcons.reserve(mPaletteIcons.size() + palette_icons_size);
-			
-			palette_icons.for_each([this](sol::object key, sol::object value)
-			{
-				mPaletteIcons.push_back(new PaletteIcon{value.as<PaletteIcon&>()});
-			});
-
-			std::sort(mPaletteIcons.begin(), mPaletteIcons.end(), [](const PaletteIcon* a, const PaletteIcon* b)
-			{
-				return a->sequence < b->sequence;
-			});
-		}
-	}
-
-	static inline sol::function sGetPaletteIcons;
-};
-
-OnLuaInit(sol::state_view s)
+OnLuaInit(sol::state_view s, bool is_main_state)
 {
 	s.new_usertype<PaletteIcon>(
 		"PaletteIcon",
@@ -89,16 +81,44 @@ OnLuaInit(sol::state_view s)
 		)
 	);
 
+	if (!is_main_state) return;
+
 	s["AddCustomPaletteIcons"] = [](const sol::function& fn)
 	{
-		LoadPaletteIconProps_detour::sGetPaletteIcons = fn;
+		sGetPaletteIcons = fn;
 	};
 }
 
-OnLuaDispose(sol::state_view s)
+OnLuaDispose(sol::state_view s, bool is_main_state)
 {
-	LoadPaletteIconProps_detour::sGetPaletteIcons.reset();
+	if (!is_main_state) return;
+	sGetPaletteIcons.reset();
 }
+
+member_detour(LoadPaletteIconProps_detour, PaletteIcons, void())
+{
+	void detoured()
+	{
+		original_function(this);
+		
+		if (LuaSpore::CanExecuteOnMainState() && sGetPaletteIcons)
+		{
+			const sol::table palette_icons = sGetPaletteIcons();
+			const size_t palette_icons_size = palette_icons.size();
+
+			mPaletteIcons.reserve(mPaletteIcons.size() + palette_icons_size);
+			palette_icons.for_each([this](sol::object key, const sol::object& value)
+			{
+				mPaletteIcons.push_back(new PaletteIcon{value.as<PaletteIcon&>()});
+			});
+
+			std::sort(mPaletteIcons.begin(), mPaletteIcons.end(), [](const PaletteIcon* a, const PaletteIcon* b)
+			{
+				return a->sequence < b->sequence;
+			});
+		}
+	}
+};
 
 AddSporeDetours()
 {
