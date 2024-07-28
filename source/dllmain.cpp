@@ -20,7 +20,7 @@
 #include "pch.h"
 
 #define UPE_MODNAME "UniversalPropertyEnhancer"
-#define UPE_VERSION 100000
+#define UPE_VERSION 10000
 
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
