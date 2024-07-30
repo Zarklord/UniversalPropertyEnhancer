@@ -45,6 +45,6 @@ end)
 --------------------------------------------API--------------------------------------------
 -------------------------------------------------------------------------------------------
 
-function AddPaletteIcon(palette_icon)
+function _G.AddPaletteIcon(palette_icon)
 	table.insert(palette_icons, palette_icon)
 end

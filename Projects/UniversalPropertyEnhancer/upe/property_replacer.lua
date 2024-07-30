@@ -133,22 +133,22 @@ end)
 --------------------------------------------API--------------------------------------------
 -------------------------------------------------------------------------------------------
 
-AddPropReplacerFunction, RemovePropReplacerFunction, ExecutePropReplacers = GenerateCallbackExecuter()
+_G.AddPropReplacerFunction, _G.RemovePropReplacerFunction, ExecutePropReplacers = GenerateCallbackExecuter()
 
-function AddUniversalPropertyReplacer(id, replacer)
+function _G.AddUniversalPropertyReplacer(id, replacer)
 	universal_replacements[id] = replacer
 end
 
-function RemoveUniversalPropertyReplacer(id)
+function _G.RemoveUniversalPropertyReplacer(id)
 	universal_replacements[id] = nil
 end
 
-function AddTypedPropertyReplacer(property_type, id, replacer)
+function _G.AddTypedPropertyReplacer(property_type, id, replacer)
 	type_replacement_map[property_type] = type_replacement_map[property_type] or {}
 	type_replacement_map[property_type][id] = replacer
 end
 
-function RemoveTypedPropertyReplacer(property_type, id)
+function _G.RemoveTypedPropertyReplacer(property_type, id)
 	local id_replacment_map = type_replacement_map[property_type]
 	if not id_replacment_map then
 		return

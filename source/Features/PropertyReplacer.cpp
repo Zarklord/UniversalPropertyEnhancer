@@ -58,9 +58,9 @@ member_detour(GetPropertyAlt_detour, App::PropertyList, bool(uint32_t propertyID
 		{
 			GetLuaSpore().ExecuteOnFreeState([this, propertyID, &result](const sol::state_view& s)
 			{
-				if (auto fn = sApplyPropertyReplacerFunction.get(s))
+				if (const auto* fn = sApplyPropertyReplacerFunction.get(s))
 				{
-					fn.value()(propertyID, result, static_cast<App::PropertyList*>(this));
+					fn->call(propertyID, result, static_cast<App::PropertyList*>(this));
 					SetPropertyReplaced(result);
 				}
 			});
@@ -81,9 +81,9 @@ member_detour(GetProperty_detour, App::PropertyList, bool(uint32_t propertyID, A
 		{
 			GetLuaSpore().ExecuteOnFreeState([this, propertyID, &result](const sol::state_view& s)
 			{
-				if (auto fn = sApplyPropertyReplacerFunction.get(s))
+				if (const auto* fn = sApplyPropertyReplacerFunction.get(s))
 				{
-					fn.value()(propertyID, result, static_cast<App::PropertyList*>(this));
+					fn->call(propertyID, result, static_cast<App::PropertyList*>(this));
 					SetPropertyReplaced(result);
 				}
 			});
@@ -104,9 +104,9 @@ member_detour(GetPropertyObject_detour, App::PropertyList, App::Property*(uint32
 		{
 			GetLuaSpore().ExecuteOnFreeState([this, propertyID, &result](const sol::state_view& s)
 			{
-				if (auto fn = sApplyPropertyReplacerFunction.get(s))
+				if (const auto* fn = sApplyPropertyReplacerFunction.get(s))
 				{
-					fn.value()(propertyID, result, static_cast<App::PropertyList*>(this));
+					fn->call(propertyID, result, static_cast<App::PropertyList*>(this));
 				}
 			});
 		}

@@ -49,9 +49,9 @@ virtual_detour(GetPropertyList_detour, App::cPropManager, App::IPropManager, boo
 		{
 			GetLuaSpore().ExecuteOnFreeState([&pDst, instanceID, groupID](const sol::state_view& s)
 			{
-				if (auto fn = sApplyPropertyListPostInit.get(s))
+				if (const auto* fn = sApplyPropertyListPostInit.get(s))
 				{
-					fn.value()(pDst, instanceID, groupID);
+					fn->call(pDst, instanceID, groupID);
 				}
 			});
 		}

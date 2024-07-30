@@ -24,7 +24,7 @@
 
 #include <Spore/Resource/cResourceManager.h>
 
-static sol::function sGetPaletteIcons;
+static sol::function* sGetPaletteIcons = nullptr;
 
 struct PaletteIcon {
 	uint32_t id;
@@ -78,21 +78,26 @@ OnLuaInit(sol::state_view s, bool is_main_state)
 			{
 				icon.name.SetText(text.tableID, text.instanceID);
 			}
-		)
+		),
+		sol::meta_function::to_string, [](const PaletteIcons& icon)
+		{
+			return string().sprintf("PaletteIcons (%p)", &icon);
+		}
 	);
 
 	if (!is_main_state) return;
 
 	s["AddCustomPaletteIcons"] = [](const sol::function& fn)
 	{
-		sGetPaletteIcons = fn;
+		sGetPaletteIcons = new sol::function(fn);
 	};
 }
 
 OnLuaDispose(sol::state_view s, bool is_main_state)
 {
 	if (!is_main_state) return;
-	sGetPaletteIcons.reset();
+	delete sGetPaletteIcons;
+	sGetPaletteIcons = nullptr;
 }
 
 member_detour(LoadPaletteIconProps_detour, PaletteIcons, void())
@@ -103,7 +108,10 @@ member_detour(LoadPaletteIconProps_detour, PaletteIcons, void())
 		
 		if (LuaSpore::CanExecuteOnMainState() && sGetPaletteIcons)
 		{
-			const sol::table palette_icons = sGetPaletteIcons();
+			const auto result = sGetPaletteIcons->call();
+			if (!result.valid()) return;
+
+			const sol::table palette_icons = result;
 			const size_t palette_icons_size = palette_icons.size();
 
 			mPaletteIcons.reserve(mPaletteIcons.size() + palette_icons_size);

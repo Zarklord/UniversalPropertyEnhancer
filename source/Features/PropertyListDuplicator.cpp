@@ -49,9 +49,12 @@ virtual_detour(GetRecordKeyList_detour, Resource::cResourceManager, Resource::IR
 		{
 			GetLuaSpore().ExecuteOnFreeState([&func_result, &dst, filter](const sol::state_view& s)
 			{
-				if (auto fn = sApplyPropertyListDuplicator.get(s))
+				if (const auto* fn = sApplyPropertyListDuplicator.get(s))
 				{
-					const sol::table record_keys = fn.value()(filter);
+					const auto result = fn->call(filter);
+					if (!result.valid()) return;
+
+					const sol::table record_keys = result;
 					const size_t record_keys_size = record_keys.size();
 
 					func_result += record_keys_size;
@@ -78,9 +81,12 @@ virtual_detour(GetRecordKeyList2_detour, Resource::cResourceManager, Resource::I
 		{
 			GetLuaSpore().ExecuteOnFreeState([&func_result, &dst, filter](const sol::state_view& s)
 			{
-				if (auto fn = sApplyPropertyListDuplicator.get(s))
+				if (const auto* fn = sApplyPropertyListDuplicator.get(s))
 				{
-					const sol::table record_keys = fn.value()(filter);
+					const auto result = fn->call(filter);
+					if (!result.valid()) return;
+
+					const sol::table record_keys = result;
 					const size_t record_keys_size = record_keys.size();
 
 					func_result += record_keys_size;

@@ -114,10 +114,10 @@ end)
 --------------------------------------------API--------------------------------------------
 -------------------------------------------------------------------------------------------
 
-AddPropPostInit_Pre, RemovePropPostInit_Pre, ExecutePropPostInit_Pre = GenerateCallbackExecuter()
-AddPropPostInit_Post, RemovePropPostInit_Post, ExecutePropPostInit_Post = GenerateCallbackExecuter()
+_G.AddPropPostInit_Pre, _G.RemovePropPostInit_Pre, ExecutePropPostInit_Pre = GenerateCallbackExecuter()
+_G.AddPropPostInit_Post, _G.RemovePropPostInit_Post, ExecutePropPostInit_Post = GenerateCallbackExecuter()
 
-function AddPropSpecificPostInit(group_id, instance_id, postinit)
+function _G.AddPropSpecificPostInit(group_id, instance_id, postinit)
 	local group_instances = postinit_groups[group_id]
 	if not group_instances then
 		group_instances = {}
@@ -127,7 +127,7 @@ function AddPropSpecificPostInit(group_id, instance_id, postinit)
 	group_instances[instance_id] = postinit
 end
 
-function RemovePropSpecificPostInit(group_id, instance_id)
+function _G.RemovePropSpecificPostInit(group_id, instance_id)
 	local group_instances = postinit_groups[group_id]
 	if not group_instances then
 		return
