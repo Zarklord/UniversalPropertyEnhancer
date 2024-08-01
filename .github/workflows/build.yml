@@ -1,0 +1,199 @@
+name: Build UniversalPropertyEnhancer
+
+on:
+  push:
+  workflow_dispatch:
+
+env:
+# Build Packages Variables
+  SPORE_MODDER_FX_TAG: 'v2.2.10'
+  SPORE_MODDER_FX_FILE: 'SporeModder.FX.zip'
+  
+# Build DLLs Variables
+  SPORE_MOD_API_REF: 'v2.5.326'
+  SPORE_LUA_API_REF: '67811a03f2edc84a26956c512d0180564ebe0dd3'
+  SPORE_MOD_API_BUILD_VER: '326'
+
+#Build Sporemod Variables
+  SPOREMOD_DLLS_BUILD: '2.5.326'
+  SPOREMOD_PREFIX: 'UPE'
+
+jobs:
+  build-packages:
+    name: Build Packages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+          java-package: 'jre'
+      - name: Setup SMFX
+        uses: robinraju/release-downloader@v1
+        with:
+          repository: 'emd4600/SporeModder-FX'
+          tag: ${{ env.SPORE_MODDER_FX_TAG }}
+          fileName: ${{ env.SPORE_MODDER_FX_FILE }}
+          tarBall: false
+          zipBall: false
+          out-file-path: ''
+          extract: true
+      - run: mkdir -p Packages
+      - name: Build SMFX Project
+        run: |
+          cd "SporeModder FX"
+          java -jar SporeModderFX.jar pack ../Projects/UniversalPropertyEnhancer ../Packages/UniversalPropertyEnhancer.package
+      - name: Upload Packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: packages
+          retention-days: 1
+          compression-level: 0
+          path: Packages/*
+
+  build-dlls:
+    name: Build DLLs
+    runs-on: windows-2022
+    steps:
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      # Build Spore-ModAPI
+      - name: Cache Spore-ModAPI
+        id: cache-spore-modapi
+        uses: actions/cache/restore@v4
+        with:
+          path: Spore-ModAPI
+          key: spore-modapi-${{ env.SPORE_MOD_API_REF }}
+      - name: Checkout Spore-ModAPI
+        if: ${{ steps.cache-spore-modapi.outputs.cache-hit != 'true' }}
+        uses: actions/checkout@v4
+        with:
+          repository: 'emd4600/Spore-ModAPI'
+          ref: ${{ env.SPORE_MOD_API_REF }}
+          path: 'Spore-ModAPI'
+          submodules: 'true'
+      - name: Build Spore ModAPI
+        run: |
+          cd Spore-ModAPI
+          msbuild "Spore ModAPI" /m "/p:Configuration=Release DLL,Platform=x86,SDK_BUILD_VER=${{ env.SPORE_MOD_API_BUILD_VER }},EXECUTABLE_TYPE=2" `
+            "/p:OutDir=${{ github.workspace }}\coreLibs\" /clp:Summary /v:m
+      - name: Save Spore-ModAPI
+        if: ${{ ! contains(github.ref_type, 'tag') && steps.cache-spore-modapi.outputs.cache-hit != 'true' }}
+        uses: actions/cache/save@v4
+        with:
+          path: Spore-ModAPI
+          key: ${{ steps.cache-spore-modapi.outputs.cache-primary-key }}
+
+      # Build Spore-LuaAPI
+      - name: Cache Spore-LuaAPI
+        id: cache-spore-luaapi
+        uses: actions/cache/restore@v4
+        with:
+          path: Spore-LuaAPI
+          key: spore-luaapi-${{ env.SPORE_LUA_API_REF }}
+      - name: Checkout Spore-LuaAPI
+        if: ${{ steps.cache-spore-luaapi.outputs.cache-hit != 'true' }}
+        uses: actions/checkout@v4
+        with:
+          repository: 'Zarklord/Spore-LuaAPI'
+          ref: ${{ env.SPORE_LUA_API_REF }}
+          path: 'Spore-LuaAPI'
+          submodules: 'true'
+      - name: Build Spore LuaAPI
+        run: |
+          cd Spore-LuaAPI
+          msbuild "Spore LuaAPI.sln" /m "/p:Configuration=Release DLL,Platform=x86" `
+            "/p:SporeSDKPath=${{ github.workspace }}\Spore-ModAPI\,SporeLauncherPath=${{ github.workspace }}\" `
+            "/p:OutDir=${{ github.workspace }}\coreLibs\" /clp:Summary /v:m
+      - name: Save Spore-LuaAPI
+        if: ${{ ! contains(github.ref_type, 'tag') && steps.cache-spore-luaapi.outputs.cache-hit != 'true' }}
+        uses: actions/cache/save@v4
+        with:
+          path: Spore-LuaAPI
+          key: ${{ steps.cache-spore-luaapi.outputs.cache-primary-key }}
+
+      #Build UniversalPropertyEnhancer
+      - name: Checkout UniversalPropertyEnhancer
+        uses: actions/checkout@v4
+        with:
+          path: ${{ github.event.repository.name }}
+          submodules: 'true'
+      - name: Build UniversalPropertyEnhancer
+        run: |
+          cd ${{ github.event.repository.name }}
+          msbuild UniversalPropertyEnhancer.sln /m /p:Configuration=Release,Platform=x86 `
+            "/p:SporeSDKPath=${{ github.workspace }}\Spore-ModAPI\,SporeLuaSdkPath=${{ github.workspace }}\Spore-LuaAPI\,SporeLauncherPath=${{ github.workspace }}\" `
+            "/p:OutDir=${{ github.workspace }}\coreLibs\" /clp:Summary /v:m
+      - name: Upload DLL
+        uses: actions/upload-artifact@v4
+        with:
+          name: dll
+          retention-days: 1
+          compression-level: 0
+          path: |
+            coreLibs/UniversalPropertyEnhancer.dll
+            coreLibs/UniversalPropertyEnhancer.pdb
+
+  build-sporemod:
+    name: Build Sporemod
+    needs: [ build-packages, build-dlls ]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:      
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: ${{ github.workspace }}/Sporemod
+          merge-multiple: true
+
+      # any tag that doesn't match v.X.X.X (with an optional single character path, eg v1.2.73b) will be marked as experimental
+      - run: echo "${{ github.ref_name }}" | grep -qE '^v[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+[[:alpha:]]?$'
+        id: test_experimental
+        continue-on-error: true
+      - run: echo "SPOREMOD_EXPERIMENTAL=${{ steps.test_experimental.outcome != 'success' }}" >> $GITHUB_ENV
+
+      - uses: iamazeem/substitute-action@v1
+        with:
+          input-files: |
+            Sporemod/ModInfo.xml
+          enable-in-place: true
+      - run: ls ${{ github.workspace }}/Sporemod
+
+      - if: ${{ contains(github.ref_type, 'tag') }}
+        run: echo "SPOREMOD_NAME=${{ env.SPOREMOD_PREFIX }}${{ github.ref_name }}.sporemod" >> $GITHUB_ENV
+      - if: ${{ ! contains(github.ref_type, 'tag') }}
+        run: echo "SPOREMOD_NAME=${{ env.SPOREMOD_PREFIX }}${{ github.ref_name }}-$(git rev-parse --short HEAD).sporemod" >> $GITHUB_ENV
+          
+      - run: echo "DRAFT_RELEASE_NAME=$(echo "${{ github.event.repository.name }} ${{ github.ref_name }}" | tr '-' ' ')" >> $GITHUB_ENV
+
+      - name: Create sporemod
+        uses: thedoctor0/zip-release@0.7.6
+        with:
+          type: 'zip'
+          filename: ${{ env.SPOREMOD_NAME }}
+          path: 'Sporemod'
+          custom: '-j -9'
+  
+      - name: Create draft release
+        if: ${{ contains(github.ref_type, 'tag') }}
+        uses: ncipollo/release-action@v1.14.0
+        with:
+          draft: true
+          name: ${{ env.DRAFT_RELEASE_NAME }}
+          prerelease: ${{ env.SPOREMOD_EXPERIMENTAL }}
+          makeLatest: true
+          tag: ${{ github.ref_name }}
+          artifacts: ${{ env.SPOREMOD_NAME }}
+
+      - name: Upload sporemod artifact
+        if: ${{ ! contains(github.ref_type, 'tag') }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: sporemod
+          retention-days: 30
+          compression-level: 0
+          path: ${{ env.SPOREMOD_NAME }}

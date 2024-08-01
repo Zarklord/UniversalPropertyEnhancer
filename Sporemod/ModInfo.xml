@@ -1,0 +1,6 @@
+<mod displayName="Universal Property Enhancer" unique="upe" description="Universal Property Enhancer is a mod for Spore, that allows enhancements to properties in a dynamic way." isExperimental="$SPOREMOD_EXPERIMENTAL" installerSystemVersion="1.0.1.2" dllsBuild="$SPOREMOD_DLLS_BUILD">
+	<prerequisite>UniversalPropertyEnhancer.dll</prerequisite>
+	<prerequisite game="Spore">UniversalPropertyEnhancer.package</prerequisite>
+	<remove>UniversalPropertyReplacement*</remove>
+	<remove game="GalacticAdventures">UPEVerify.package</remove>
+</mod>
