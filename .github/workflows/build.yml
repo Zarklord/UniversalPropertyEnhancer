@@ -2,6 +2,9 @@ name: Build UniversalPropertyEnhancer
 
 on:
   push:
+    branches-ignore:
+      - 'gh-pages'
+  pull_request:
   workflow_dispatch:
 
 env:
