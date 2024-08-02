@@ -4,9 +4,9 @@ You can find developer documentation for [Universal Property Enhancer](https://z
 
 <seealso style="cards">
     <category ref="features">
-        <a href="Property-Replacement.md"/>
-        <a href="Property-Postinits.md"/>
-        <a href="Property-List-Duplication.md"/>
-        <a href="Palette-Icons.md"/>
+        <a href="Legacy-Property-Replacement.md"/>
+        <a href="Legacy-Property-Postinits.md"/>
+        <a href="Legacy-Property-List-Duplication.md"/>
+        <a href="Legacy-Palette-Icons.md"/>
     </category>
 </seealso>

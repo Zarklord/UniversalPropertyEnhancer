@@ -1,7 +1,7 @@
 # Palette Icons
-<link-summary>Use UPE to add custom palette icons to your part pages</link-summary>
-<web-summary>Use UPE to add custom palette icons to your part pages</web-summary>
-<card-summary>Use UPE to add custom palette icons to your part pages</card-summary>
+<link-summary>Use UPEs legacy api to add custom palette icons to your part pages</link-summary>
+<web-summary>Use UPEs legacy api to add custom palette icons to your part pages</web-summary>
+<card-summary>Use UPEs legacy api to add custom palette icons to your part pages</card-summary>
 
 ## Feature
 

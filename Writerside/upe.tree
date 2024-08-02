@@ -2,12 +2,14 @@
 <!DOCTYPE instance-profile
         SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
 
-<instance-profile id="upe" name="Universal Property Enhancer"
-                  start-page="Documentation.md">
-
+<instance-profile id="upe" name="Universal Property Enhancer" start-page="Documentation.md">
     <toc-element topic="Documentation.md" hidden="true"/>
-    <toc-element topic="Property-Replacement.md"/>
-    <toc-element topic="Property-Postinits.md"/>
-    <toc-element topic="Property-List-Duplication.md"/>
-    <toc-element topic="Palette-Icons.md"/>
+    <toc-element toc-title="Lua API">
+    </toc-element>
+    <toc-element toc-title="Legacy API" >
+        <toc-element topic="Legacy-Property-Replacement.md"/>
+        <toc-element topic="Legacy-Property-Postinits.md"/>
+        <toc-element topic="Legacy-Property-List-Duplication.md"/>
+        <toc-element topic="Legacy-Palette-Icons.md"/>
+    </toc-element>
 </instance-profile>
