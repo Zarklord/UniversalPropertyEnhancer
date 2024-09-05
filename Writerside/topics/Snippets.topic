@@ -29,4 +29,18 @@
             </p>
         </tip>
     </snippet>
+
+    <snippet id="luaapi-wait-for-propmanager">
+        <warning>
+            <p>
+                Ensure your mod's priority is lower than this mod, otherwise you won't be able to easily access these APIs.
+            </p>
+        </warning>
+        <warning>
+            <p>
+                These APIs aren't added to the global environment until <code>OnPropManagerInitialized</code> is called.
+                If your going to use these APIs, make sure your code runs after that function is called.
+            </p>
+        </warning>
+    </snippet>
 </topic>

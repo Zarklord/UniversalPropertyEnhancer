@@ -5,6 +5,7 @@
 <instance-profile id="upe" name="Universal Property Enhancer" start-page="Documentation.md">
     <toc-element topic="Documentation.md" hidden="true"/>
     <toc-element toc-title="Lua API">
+        <toc-element topic="Palette-Icons.md"/>
     </toc-element>
     <toc-element toc-title="Legacy API" >
         <toc-element topic="Legacy-Property-Replacement.md"/>
