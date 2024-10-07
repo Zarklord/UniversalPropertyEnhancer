@@ -4,6 +4,8 @@ on:
   push:
     branches-ignore:
       - 'gh-pages'
+    tags:
+      - '*'
   pull_request:
   workflow_dispatch:
 
@@ -64,14 +66,7 @@ jobs:
         uses: microsoft/setup-msbuild@v2
 
       # Build Spore-ModAPI
-      - name: Cache Spore-ModAPI
-        id: cache-spore-modapi
-        uses: actions/cache/restore@v4
-        with:
-          path: Spore-ModAPI
-          key: spore-modapi-${{ env.SPORE_MOD_API_REF }}
       - name: Checkout Spore-ModAPI
-        if: ${{ steps.cache-spore-modapi.outputs.cache-hit != 'true' }}
         uses: actions/checkout@v4
         with:
           repository: 'emd4600/Spore-ModAPI'
@@ -83,22 +78,9 @@ jobs:
           cd Spore-ModAPI
           msbuild "Spore ModAPI" /m "/p:Configuration=Release DLL,Platform=x86,SDK_BUILD_VER=${{ env.SPORE_MOD_API_BUILD_VER }},EXECUTABLE_TYPE=2" `
             "/p:OutDir=${{ github.workspace }}\coreLibs\" /clp:Summary /v:m
-      - name: Save Spore-ModAPI
-        if: ${{ ! contains(github.ref_type, 'tag') && steps.cache-spore-modapi.outputs.cache-hit != 'true' }}
-        uses: actions/cache/save@v4
-        with:
-          path: Spore-ModAPI
-          key: ${{ steps.cache-spore-modapi.outputs.cache-primary-key }}
 
       # Build Spore-LuaAPI
-      - name: Cache Spore-LuaAPI
-        id: cache-spore-luaapi
-        uses: actions/cache/restore@v4
-        with:
-          path: Spore-LuaAPI
-          key: spore-luaapi-${{ env.SPORE_LUA_API_REF }}
       - name: Checkout Spore-LuaAPI
-        if: ${{ steps.cache-spore-luaapi.outputs.cache-hit != 'true' }}
         uses: actions/checkout@v4
         with:
           repository: 'Zarklord/Spore-LuaAPI'
@@ -111,12 +93,6 @@ jobs:
           msbuild "Spore LuaAPI.sln" /m "/p:Configuration=Release DLL,Platform=x86" `
             "/p:SporeSDKPath=${{ github.workspace }}\Spore-ModAPI\,SporeLauncherPath=${{ github.workspace }}\" `
             "/p:OutDir=${{ github.workspace }}\coreLibs\" /clp:Summary /v:m
-      - name: Save Spore-LuaAPI
-        if: ${{ ! contains(github.ref_type, 'tag') && steps.cache-spore-luaapi.outputs.cache-hit != 'true' }}
-        uses: actions/cache/save@v4
-        with:
-          path: Spore-LuaAPI
-          key: ${{ steps.cache-spore-luaapi.outputs.cache-primary-key }}
 
       #Build UniversalPropertyEnhancer
       - name: Checkout UniversalPropertyEnhancer
