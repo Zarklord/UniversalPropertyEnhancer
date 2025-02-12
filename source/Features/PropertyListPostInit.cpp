@@ -28,9 +28,9 @@ static LuaMultiReference<sol::function> sApplyPropertyListPostInit;
 
 OnLuaInit(sol::state_view s, bool is_main_state)
 {
-	s["SetPropertyListPostInitFunction"] = [](const sol::this_state L, const sol::function& fn)
+	s["SetPropertyListPostInitFunction"] = [](const sol::this_state L, sol::function&& fn)
 	{
-		sApplyPropertyListPostInit.set(L, fn);
+		sApplyPropertyListPostInit.set(L, std::move(fn));
 	};
 }
 

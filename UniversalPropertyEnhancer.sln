@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lua54", "..\Spore-LuaAPI\lu
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tracy", "..\Spore-LuaAPI\tracy\tracy.vcxproj", "{79338010-B010-4950-B2D1-F4E187E74B8B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "asmjit", "..\Spore-LuaAPI\asmjit\asmjit.vcxproj", "{87ACAEE2-109F-454D-A36F-59AD36371008}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -43,6 +45,10 @@ Global
 		{79338010-B010-4950-B2D1-F4E187E74B8B}.Debug|x86.Build.0 = Debug|Win32
 		{79338010-B010-4950-B2D1-F4E187E74B8B}.Release|x86.ActiveCfg = Release|Win32
 		{79338010-B010-4950-B2D1-F4E187E74B8B}.Release|x86.Build.0 = Release|Win32
+		{87ACAEE2-109F-454D-A36F-59AD36371008}.Debug|x86.ActiveCfg = Debug|Win32
+		{87ACAEE2-109F-454D-A36F-59AD36371008}.Debug|x86.Build.0 = Debug|Win32
+		{87ACAEE2-109F-454D-A36F-59AD36371008}.Release|x86.ActiveCfg = Release|Win32
+		{87ACAEE2-109F-454D-A36F-59AD36371008}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

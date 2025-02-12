@@ -26,9 +26,9 @@ static LuaMultiReference<sol::function> sApplyPropertyReplacerFunction;
 
 OnLuaInit(sol::state_view s, bool is_main_state)
 {
-	s["SetPropertyReplacerFunction"] = [](const sol::this_state L, const sol::function& fn)
+	s["SetPropertyReplacerFunction"] = [](const sol::this_state L, sol::function&& fn)
 	{
-		sApplyPropertyReplacerFunction.set(L, fn);
+		sApplyPropertyReplacerFunction.set(L, std::move(fn));
 	};
 }
 

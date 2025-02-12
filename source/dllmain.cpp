@@ -35,7 +35,6 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 		CommitDetours();
 		break;
 	case DLL_PROCESS_DETACH:
-		*reinterpret_cast<uint32_t*>(GetAddress(Internal, Allocator_ptr)) = NULL;
 	case DLL_THREAD_ATTACH:
 	case DLL_THREAD_DETACH:
 		break;

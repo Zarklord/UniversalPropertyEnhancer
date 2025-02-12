@@ -28,9 +28,9 @@ static LuaMultiReference<sol::function> sApplyPropertyListDuplicator;
 
 OnLuaInit(sol::state_view s, bool is_main_state)
 {
-	s["SetPropertyListDuplicatorFunction"] = [](const sol::this_state L, const sol::function& fn)
+	s["SetPropertyListDuplicatorFunction"] = [](const sol::this_state L, sol::function&& fn)
 	{
-		sApplyPropertyListDuplicator.set(L, fn);
+		sApplyPropertyListDuplicator.set(L, std::move(fn));
 	};
 }
 
