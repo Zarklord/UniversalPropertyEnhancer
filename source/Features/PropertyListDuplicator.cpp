@@ -47,24 +47,23 @@ virtual_detour(GetRecordKeyList_detour, Resource::cResourceManager, Resource::IR
 		
 		if (sApplyPropertyListDuplicator)
 		{
-			GetLuaSpore().ExecuteOnFreeState([&func_result, &dst, filter](const sol::state_view& s)
+			auto free_state = GetLuaSpore().GetFreeLuaState();
+
+			if (const auto* fn = sApplyPropertyListDuplicator.get(free_state))
 			{
-				if (const auto* fn = sApplyPropertyListDuplicator.get(s))
+				const auto result = fn->call(filter);
+				if (!result.valid()) return func_result;
+
+				const sol::table record_keys = result;
+				const size_t record_keys_size = record_keys.size();
+
+				func_result += record_keys_size;
+				dst.reserve(func_result);
+				record_keys.for_each([&dst](sol::object key, const sol::object& value)
 				{
-					const auto result = fn->call(filter);
-					if (!result.valid()) return;
-
-					const sol::table record_keys = result;
-					const size_t record_keys_size = record_keys.size();
-
-					func_result += record_keys_size;
-					dst.reserve(func_result);
-					record_keys.for_each([&dst](sol::object key, const sol::object& value)
-					{
-						dst.push_back(value.as<ResourceKey&>());
-					});
-				}
-			});
+					dst.push_back(value.as<ResourceKey&>());
+				});
+			}
 		}
 
 		return func_result;
@@ -79,24 +78,22 @@ virtual_detour(GetRecordKeyList2_detour, Resource::cResourceManager, Resource::I
 		
 		if (sApplyPropertyListDuplicator)
 		{
-			GetLuaSpore().ExecuteOnFreeState([&func_result, &dst, filter](const sol::state_view& s)
+			auto free_state = GetLuaSpore().GetFreeLuaState();
+			if (const auto* fn = sApplyPropertyListDuplicator.get(free_state))
 			{
-				if (const auto* fn = sApplyPropertyListDuplicator.get(s))
+				const auto result = fn->call(filter);
+				if (!result.valid()) return func_result;
+
+				const sol::table record_keys = result;
+				const size_t record_keys_size = record_keys.size();
+
+				func_result += record_keys_size;
+				dst.reserve(func_result);
+				record_keys.for_each([&dst](sol::object key, const sol::object& value)
 				{
-					const auto result = fn->call(filter);
-					if (!result.valid()) return;
-
-					const sol::table record_keys = result;
-					const size_t record_keys_size = record_keys.size();
-
-					func_result += record_keys_size;
-					dst.reserve(func_result);
-					record_keys.for_each([&dst](sol::object key, const sol::object& value)
-					{
-						dst.push_back(value.as<ResourceKey&>());
-					});
-				}
-			});
+					dst.push_back(value.as<ResourceKey&>());
+				});
+			}
 		}
 
 		return func_result;

@@ -105,8 +105,9 @@ member_detour(LoadPaletteIconProps_detour, PaletteIcons, void())
 	void detoured()
 	{
 		original_function(this);
-		
-		if (LuaSpore::CanExecuteOnMainState() && sGetPaletteIcons)
+
+		auto main_state = GetLuaSpore().GetMainLuaState();
+		if (sGetPaletteIcons)
 		{
 			const auto result = sGetPaletteIcons->call();
 			if (!result.valid()) return;

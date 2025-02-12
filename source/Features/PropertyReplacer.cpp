@@ -56,14 +56,12 @@ member_detour(GetPropertyAlt_detour, App::PropertyList, bool(uint32_t propertyID
 		const bool fresult = original_function(this, propertyID, result);
 		if (fresult && depth == 1 && !GetPropertyReplaced(result) && sApplyPropertyReplacerFunction)
 		{
-			GetLuaSpore().ExecuteOnFreeState([this, propertyID, &result](const sol::state_view& s)
+			auto free_state = GetLuaSpore().GetFreeLuaState();
+			if (const auto* fn = sApplyPropertyReplacerFunction.get(free_state))
 			{
-				if (const auto* fn = sApplyPropertyReplacerFunction.get(s))
-				{
-					fn->call(propertyID, result, static_cast<App::PropertyList*>(this));
-					SetPropertyReplaced(result);
-				}
-			});
+				fn->call(propertyID, result, static_cast<App::PropertyList*>(this));
+				SetPropertyReplaced(result);
+			}
 		}
 		--depth;
 		return fresult;
@@ -79,14 +77,12 @@ member_detour(GetProperty_detour, App::PropertyList, bool(uint32_t propertyID, A
 		const bool fresult = original_function(this, propertyID, result);
 		if (fresult && depth == 1 && !GetPropertyReplaced(result) && sApplyPropertyReplacerFunction)
 		{
-			GetLuaSpore().ExecuteOnFreeState([this, propertyID, &result](const sol::state_view& s)
+			auto free_state = GetLuaSpore().GetFreeLuaState();
+			if (const auto* fn = sApplyPropertyReplacerFunction.get(free_state))
 			{
-				if (const auto* fn = sApplyPropertyReplacerFunction.get(s))
-				{
-					fn->call(propertyID, result, static_cast<App::PropertyList*>(this));
-					SetPropertyReplaced(result);
-				}
-			});
+				fn->call(propertyID, result, static_cast<App::PropertyList*>(this));
+				SetPropertyReplaced(result);
+			}
 		}
 		--depth;
 		return fresult;
@@ -102,13 +98,11 @@ member_detour(GetPropertyObject_detour, App::PropertyList, App::Property*(uint32
 		App::Property* result = original_function(this, propertyID);
 		if (depth == 1 && sApplyPropertyReplacerFunction)
 		{
-			GetLuaSpore().ExecuteOnFreeState([this, propertyID, &result](const sol::state_view& s)
+			auto free_state = GetLuaSpore().GetFreeLuaState();
+			if (const auto* fn = sApplyPropertyReplacerFunction.get(free_state))
 			{
-				if (const auto* fn = sApplyPropertyReplacerFunction.get(s))
-				{
-					fn->call(propertyID, result, static_cast<App::PropertyList*>(this));
-				}
-			});
+				fn->call(propertyID, result, static_cast<App::PropertyList*>(this));
+			}
 		}
 		--depth;
 		return result;
